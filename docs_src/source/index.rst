@@ -26,7 +26,7 @@ Block in-game.
 Installation
 ============
 
-.. code-block::
+.. code-block:: bash
     
     pip install mcstructure
 
@@ -61,15 +61,6 @@ Basic Usage
     
     with open("house.mcstructure", "rb") as f:
         struct = Structure.load(f)
-
-
-============
-Installation
-============
-
-.. code-block:: bash
-    
-    pip install mcstructure
 
 
 ===

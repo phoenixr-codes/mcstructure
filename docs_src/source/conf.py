@@ -24,7 +24,7 @@ sys.path.append(str(Path('./_ext').resolve()))
 project = 'mcstructure'
 copyright = f'{date.today().year}, phoenixR'
 author = 'phoenixR'
-release = '0.0.1b0'
+release = '0.0.1b0.post1'
 
 
 ###############

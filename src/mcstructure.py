@@ -321,7 +321,3 @@ class Structure:
         self._structure[fx:tx, fy:ty, fz:tz]
         return self
 
-
-if __name__ == '__main__':
-    struct = Structure((10, 10, 10), Block("minecraft:wool", color = "white"))
-    print(struct)
