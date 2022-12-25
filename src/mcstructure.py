@@ -3,6 +3,8 @@ Read and write Minecraft .mcstructure files.
 """
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
+# TODO: test mirrow
+# TODO: test rotate
 # TODO: second layer (waterlogged blocks)
 # TODO: additional block data
 # TODO: entities
@@ -93,16 +95,31 @@ class Block:
     
     Example
     -------
-    Block("minecraft:wool", color = "red")
+    .. code-block::
+        
+        Block("minecraft:wool", color = "red")
     """
     identifier: str
     states: dict[str, Any]
     
     def __init__(self, identifier: str, **states: Any):
+        """
+        Parameters
+        ----------
+        identifier
+            The identifier of the block (e.g. "minecraft:wool").
+        
+        states
+            The block states such as "color" or "stone_type".
+            This varies by every block.
+        """
         self.identifier = identifier
         self.states = states
     
     def get_namespace_and_name(self) -> tuple[Optional[str], str]:
+        """
+        Returns the namespace and the name of the block.
+        """
         if ":" in self.identifier:
             ns, name = self.identifier.split(":", 1)
             return ns, name
@@ -110,13 +127,22 @@ class Block:
         return (None, self.identifier)
     
     def get_name(self) -> str:
+        """
+        Returns the name of the block.
+        """
         return self.get_namespace_and_name()[1]
     
     def get_namespace(self) -> Optional[str]:
+        """
+        Returns the namespace of the block.
+        """
         return self.get_namespace_and_name()[0]
 
 class Structure:
     """
+    Class representing a Minecraft structure that
+    consists of blocks and entities.
+    
     Attributes
     ----------
     size
@@ -138,7 +164,7 @@ class Structure:
             creation of a new structure object.
             
             If this is set to ``None`` the structure
-            is filled with structure void blocks.
+            is filled with "Structure Void" blocks.
         """
         self._structure: NDArray[np.intc]
         
@@ -194,6 +220,18 @@ class Structure:
         with_namespace: bool = False,
         with_states: bool = False
     ) -> NDArray[str]:
+        """
+        Returns a numpy array where each entry is a
+        readable string of the corresponding block.
+        
+        Parameters
+        ----------
+        with_namespace
+            Adds the namespace to the string if present.
+        
+        with_states
+            Adds the block states to the string if present.
+        """
         def stringify(block: Block) -> str:
             name = ""
             
@@ -212,6 +250,20 @@ class Structure:
         return vec(arr)
     
     def _add_block_to_palette(self, block: Optional[Block]) -> int:
+        """
+        Adds a block to the palette.
+        
+        Parameters
+        ----------
+        block
+            The block to add. If this is set to ``None``
+            "Structure Void" will be used.
+        
+        Returns
+        -------
+        The position of the block in the palette. This is
+        ``-1`` when ``None`` is used as ``block``.
+        """
         if block is None:
             return -1
         
@@ -270,11 +322,49 @@ class Structure:
         ), little_endian = True)
         nbt.save(file, little_endian = True)
     
+    def mirrow(self, axis: str) -> Structure:
+        """
+        Flips the structure.
+        
+        Parameters
+        ----------
+        axis
+            Turn the structure either the ``X`` or ``Z`` axis.
+            Use ``"X"``, ``"x"``,``"Z"`` or ``"z"``.
+        """
+        assert axis in "XxZz"
+        if axis in "Xx":
+            self._structure = self._structure[::-1, :, :]
+        else:
+            self._structure = self._structure[:, :, ::-1]
+        return self
+    
+    def rotates(self, by: int) -> Structure:
+        """
+        Rotates the structure.
+        
+        Parameters
+        ----------
+        by
+            Rotates the structure by ``90``, ``180``
+            or ``270`` degrees.
+        """
+        assert by in [90, 180, 270]
+        if by == 90:
+            self._structure = np.rot90(self._structure, k = 1, axes = (0, 1))
+        elif by == 180:
+            self._structure = np.rot90(self._structure, k = 2, axes = (0, 1))
+        else:
+            self._structure = np.rot90(self._structure, k = 3, axes = (0, 1))
+        return self
+    
     def get_block(
         self,
         coordinate: Coordinate
     ) -> Optional[Block]:
         """
+        Returns the block in a specific position.
+        
         Parameters
         ----------
         coordinate
@@ -298,7 +388,7 @@ class Structure:
         
         block
             The block to place. If this is set to ``None``
-            structure void will be used.
+            "Structure Void" will be used.
         """
         x, y, z = coordinate
         
@@ -313,6 +403,18 @@ class Structure:
         to_coordinate: Coordinate,
         block: Block,
     ) -> Structure:
+        """
+        Puts multiple blocks into the structure.
+        
+        Parameters
+        ----------
+        coordinate
+            Relative coordinates of the block's position.
+        
+        block
+            The block to place. If this is set to ``None``
+            "Structure Void" will be used.
+        """
         fx, fy, fz = from_coordinate
         tx, ty, tz = to_coordinate
         
