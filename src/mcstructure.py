@@ -3,24 +3,26 @@ Read and write Minecraft .mcstructure files.
 """
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
+# TODO: make Structure._structure public
 # TODO: test mirrow
 # TODO: test rotate
 # TODO: second layer (waterlogged blocks)
 # TODO: additional block data
 # TODO: entities
+# TODO: export as 3d model (might be extension)
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import repeat
 import json
-from typing import Any, BinaryIO, NoReturn, Optional
+from typing import Any, BinaryIO, NoReturn, Optional, Tuple
 
 import numpy as np
 from numpy.typing import NDArray
 from pynbt import BaseTag, NBTFile, TAG_Compound, TAG_Int, TAG_List, TAG_String
 
-Coordinate = tuple[int, int, int]
+Coordinate = Tuple[int, int, int]
 
 
 COMPABILITY_VERSION: int = 17959425
@@ -339,7 +341,7 @@ class Structure:
             self._structure = self._structure[:, :, ::-1]
         return self
     
-    def rotates(self, by: int) -> Structure:
+    def rotate(self, by: int) -> Structure:
         """
         Rotates the structure.
         
