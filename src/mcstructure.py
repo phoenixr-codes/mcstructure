@@ -324,7 +324,7 @@ class Structure:
         ), little_endian = True)
         nbt.save(file, little_endian = True)
     
-    def mirrow(self, axis: str) -> Structure:
+    def mirror(self, axis: str) -> Structure:
         """
         Flips the structure.
         
