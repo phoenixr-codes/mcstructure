@@ -1,7 +1,14 @@
-mcstructure
-===========
-
-![Logo](https://raw.githubusercontent.com/phoenixr-codes/mcstructure/main/logo.png)
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/phoenixr-codes/mcstructure/main/logo.png"
+    width="120px"
+    align="center" alt="mcstructure logo"
+  />
+  <h1 align="center">mcstructure</h1>
+  <p align="center">
+    Read and write Minecraft <code>.mcstructure</code> files.
+  </p>
+</p>
 
 _In the entire project (and officially since 
 the "Better Together Update") the term
