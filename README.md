@@ -18,6 +18,10 @@ that is also known as "Bedrock Edition"._
 _Features that this library provide are only
 useful for the above named edition of Minecraft._
 
+> **Warning**
+> This project is currently in BETA Version. Most
+> features will probably not work.
+
 This library lets you programmatically create
 and edit Minecraft structures. You are able to
 save these as ``.mcstructure`` files and for
