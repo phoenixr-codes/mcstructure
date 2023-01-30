@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcstructure"
-version = "0.0.1b2"
+version = "0.0.1b3"
 description = "Read and write Minecraft .mcstructure files."
 dependencies = [
     "numpy>=1.21",

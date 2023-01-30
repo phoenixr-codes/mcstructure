@@ -11,6 +11,7 @@ Read and write Minecraft .mcstructure files.
 # TODO: entities
 # TODO: rename set_blocks to fill_blocks or create alias
 # TODO: export as 3d model (might be extension)
+# TODO: add shadow to logo
 
 from __future__ import annotations
 
