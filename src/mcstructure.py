@@ -431,7 +431,7 @@ class Structure:
         tx, ty, tz = to_coordinate
         
         ident = self._add_block_to_palette(block)
-        print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
+        #print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
         self._structure[fx:tx+1, fy:ty+1, fz:tz+1] = np.array([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)],dtype = np.intc).reshape([abs(i)+1 for i in (fx-tx, fy-ty, fz-tz)])
         return self
 
