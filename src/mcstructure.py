@@ -167,6 +167,7 @@ class Structure:
             
             If this is set to ``None`` the structure
             is filled with "Structure Void" blocks.
+            Or defaultly it'll be filled with "air".
         """
         self._structure: NDArray[np.intc]
         
@@ -235,6 +236,9 @@ class Structure:
             Adds the block states to the string if present.
         """
         def stringify(block: Block) -> str:
+            # There will raise AttributeError when `None` occurs if we don't use this
+            if not block:
+                return "minecraft:structure_void []"
             name = ""
             
             if with_namespace and (ns := block.get_namespace()) is not None:
@@ -399,6 +403,8 @@ class Structure:
         self._structure[x, y, z] = ident
         return self
     
+    # may the name of this method set to `fill_blocks`?
+    # I think that'll be more clear to identify
     def set_blocks(
         self,
         from_coordinate: Coordinate,
@@ -410,18 +416,22 @@ class Structure:
         
         Parameters
         ----------
-        coordinate
-            Relative coordinates of the block's position.
+        from_coordinate
+            Relative coordinates of the block's position where you may want to start fill
+        to_coordinate
+            Relative coordinates of the block's position where you may want to end fill
+            
+        Note! The fill will include both start and end points
         
         block
             The block to place. If this is set to ``None``
-            "Structure Void" will be used.
+            "Structure Void" will be used to fill.
         """
         fx, fy, fz = from_coordinate
         tx, ty, tz = to_coordinate
         
         ident = self._add_block_to_palette(block)
-        
-        self._structure[fx:tx, fy:ty, fz:tz]
+        print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
+        self._structure[fx:tx+1, fy:ty+1, fz:tz+1] = np.array([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)],dtype = np.intc).reshape([abs(i)+1 for i in (fx-tx, fy-ty, fz-tz)])
         return self
 
