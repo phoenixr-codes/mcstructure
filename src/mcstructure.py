@@ -4,11 +4,12 @@ Read and write Minecraft .mcstructure files.
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
 # TODO: make Structure._structure public
-# TODO: test mirrow
+# TODO: test mirror
 # TODO: test rotate
 # TODO: second layer (waterlogged blocks)
 # TODO: additional block data
 # TODO: entities
+# TODO: rename set_blocks to fill_blocks or create alias
 # TODO: export as 3d model (might be extension)
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import repeat
 import json
-from typing import Any, BinaryIO, NoReturn, Optional, Tuple
+from typing import Any, BinaryIO, Optional, Tuple
 
 import numpy as np
 from numpy.typing import NDArray
@@ -403,8 +404,6 @@ class Structure:
         self._structure[x, y, z] = ident
         return self
     
-    # may the name of this method set to `fill_blocks`?
-    # I think that'll be more clear to identify
     def set_blocks(
         self,
         from_coordinate: Coordinate,
