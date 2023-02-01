@@ -10,7 +10,7 @@ struct.set_blocks((1,1,1),(4,1,4),Block("minecraft:iron_block"))
 
 # display stuffs in it  显示一些东西
 print(struct.get_structure())
-print(struct._get_str_array(False,True))
+print(struct._get_str_array(with_namespace=False, with_states=True))
 
 # write into file  写入文件
 with open("example.mcstructure", "wb") as f:

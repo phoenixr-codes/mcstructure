@@ -4,12 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcstructure"
-version = "0.0.1b3"
+version = "0.0.1b4"
 description = "Read and write Minecraft .mcstructure files."
 dependencies = [
     "numpy>=1.21",
     "pynbt>=2",
 ]
+requires-python = ">=3.8"
 readme = "README.md"
 license = {text = "MIT"}
 classifiers = [

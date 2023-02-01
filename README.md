@@ -10,6 +10,8 @@
   </p>
 </p>
 
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 _In the entire project (and officially since 
 the "Better Together Update") the term
 "Minecraft" refers to the edition of Minecraft
@@ -27,7 +29,7 @@ and edit Minecraft structures. You are able to
 save these as ``.mcstructure`` files and for
 example use them in behavior packs.
 
-You may aswell read them and identify blocks and
+You may aswell read them to identify blocks and
 and entities that were saved with a Structure
 Block in-game.
 
