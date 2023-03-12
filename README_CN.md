@@ -15,9 +15,9 @@
 _此项目中的所有特性也是仅仅针对基岩版的。_
 
 > **请注意**
-> 此项目目前仍属于 BETA版本，因此很多的特性可能无法实现。
+> 此项目目前仍属于 BETA 版本，因此很多的特性可能无法实现。
 
-此库可以让您以代码实现对 *《我的世界》* 结构文件的创建与编辑。
+此库可以让您以代码实现对 *《我的世界》* 结构文件的创建(create)与编辑(edit)。
 您能够凭此而将您自己的结构存储为 `.mcstructure` 文件，因而可以使之用于行为包中，或者发展出更牛逼的用途。
 
 当然，通过此库您也可以通过此库来读取(read)这些结构文件。
@@ -50,16 +50,16 @@ pip install mcstructure
 
 	# 设定方块
 	(struct
-		.set_block((1, 1, 1), Block("minecraft:grass"))
-		.set_block((2, 2, 2), Block("minecraft:grass"))
-		.set_block((3, 3, 3), Block("minecraft:grass"))
-		.set_block((4, 4, 4), Block("minecraft:grass"))
-		.set_block((5, 5, 5), Block("minecraft:grass"))
-		.set_block((6, 6, 6), Block("minecraft:grass"))
+		.set_block((1, 1, 1), Block("minecraft","grass"))
+		.set_block((2, 2, 2), Block("minecraft","grass"))
+		.set_block((3, 3, 3), Block("minecraft","grass"))
+		.set_block((4, 4, 4), Block("minecraft","grass"))
+		.set_block((5, 5, 5), Block("minecraft","grass"))
+		.set_block((6, 6, 6), Block("minecraft","grass"))
 	)
 
 	# 写入文件
-	with open("house.mcstructure", "wb") as f:
+	with open("something.mcstructure", "wb") as f:
 		struct.dump(f)
 
 	```
@@ -67,7 +67,7 @@ pip install mcstructure
 2.	读取结构文件
 
 	```python
-	with open("house.mcstructure", "rb") as f:
+	with open("something.mcstructure", "rb") as f:
 		struct = Structure.load(f)
 
 	```

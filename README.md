@@ -54,12 +54,12 @@ struct = Structure(
 )
 
 (struct
-    .set_block((1, 1, 1), Block("minecraft:grass"))
-    .set_block((2, 2, 2), Block("minecraft:grass"))
-    .set_block((3, 3, 3), Block("minecraft:grass"))
-    .set_block((4, 4, 4), Block("minecraft:grass"))
-    .set_block((5, 5, 5), Block("minecraft:grass"))
-    .set_block((6, 6, 6), Block("minecraft:grass"))
+    .set_block((1, 1, 1), Block("minecraft","grass"))
+    .set_block((2, 2, 2), Block("minecraft","grass"))
+    .set_block((3, 3, 3), Block("minecraft","grass"))
+    .set_block((4, 4, 4), Block("minecraft","grass"))
+    .set_block((5, 5, 5), Block("minecraft","grass"))
+    .set_block((6, 6, 6), Block("minecraft","grass"))
 )
 
 with open("house.mcstructure", "wb") as f:
