@@ -7,7 +7,6 @@ Read and write Minecraft .mcstructure files.
 # TODO: test mirror
 # TODO: test rotate
 # TODO: second layer (waterlogged blocks)
-# TODO: additional block data
 # TODO: entities
 # TODO: rename set_blocks to fill_blocks or create alias
 # TODO: export as 3d model (might be extension)
@@ -44,7 +43,7 @@ def _into_pyobj(tag: BaseTag) -> Any:
             res[key] = value
         return res
 
-    if isinstance(tag, (TAG_List, list)):
+    elif isinstance(tag, (TAG_List, list)):
         res = []
         for value in tag:
             if isinstance(value, BaseTag):
@@ -52,7 +51,7 @@ def _into_pyobj(tag: BaseTag) -> Any:
             res.append(value)
         return res
 
-    if isinstance(tag, BaseTag):
+    elif isinstance(tag, BaseTag):
         return tag.value
 
     return tag
@@ -62,10 +61,26 @@ def _into_tag(obj: Any) -> BaseTag:
     """
     Turn a python tree into an NBT tree.
     """
-    if isinstance(obj, int):
+    if isinstance(obj, (TAG_Compound, dict)):
+        res = {}
+        for key, value in obj.items():
+            if not isinstance(value, BaseTag):
+                value = _into_tag(value)
+            res[key] = value
+        return TAG_Compound(res)
+
+    elif isinstance(obj, (TAG_List, list)):
+        res = []
+        for value in obj:
+            if not isinstance(value, BaseTag):
+                value = _into_tag(value)
+            res.append(value)
+        return TAG_List(tag_type=(type(_into_tag(obj[0])) if obj else TAG_String),value=res)
+
+    elif isinstance(obj, int):
         return TAG_Int(obj)
 
-    if isinstance(obj, str):
+    elif isinstance(obj, str):
         return TAG_String(obj)
 
     return obj
@@ -149,7 +164,10 @@ class Block:
 
     @classmethod
     def from_identifier(
-        cls, identifier: str, **states: Union[int, str, bool]
+        cls,
+        identifier: str,
+        compability_version=COMPABILITY_VERSION,
+        **states: Union[int, str, bool],
     ):
         """
         Parameters
@@ -162,14 +180,15 @@ class Block:
             This varies by every block.
         """
 
-
         if ":" in identifier:
             namespace, base_name = identifier.split(":", 1)
         else:
             namespace = "minecraft"
             base_name = identifier
 
-        block = cls(namespace,base_name,states)
+        block = cls(
+            namespace, base_name, states, compability_version=compability_version
+        )
 
         return block
 
@@ -178,6 +197,18 @@ class Block:
 
     def __dict__(self) -> dict:
         return self.dictionarify()
+
+    def add_states(
+        self,
+        states: dict[str, Union[int, str, bool]],
+    ) -> None:
+        self.states.update(states)
+
+    def add_extra_data(
+        self,
+        extra_data: dict[str, Union[int, str, bool]],
+    ) -> None:
+        self.extra_data.update(extra_data)
 
     def dictionarify(self, *, with_states: bool = True) -> Dict[str, Any]:
         result = {
@@ -257,7 +288,10 @@ class Structure:
     """
 
     def __init__(
-        self, size: tuple[int, int, int], fill: Optional[Block] = Block.from_identifier("minecraft:air")
+        self,
+        size: tuple[int, int, int],
+        fill: Optional[Block] = None,
+        compability_version: int = COMPABILITY_VERSION,
     ):
         """
         Parameters
@@ -278,6 +312,7 @@ class Structure:
 
         self._size = size
         self._palette: list[Block] = []
+        self._special_block_indices: list[int] = []
 
         if fill is None:
             self._structure = np.full(size, -1, dtype=np.intc)
@@ -285,6 +320,8 @@ class Structure:
         else:
             self._structure = np.zeros(size, dtype=np.intc)
             self._palette.append(fill)
+
+        self.compability_version = compability_version
 
     @classmethod
     def load(cls, file: BinaryIO):
@@ -313,10 +350,22 @@ class Structure:
 
         struct._palette.extend(
             [
-                Block.from_identifier(block["name"].value, **_into_pyobj(block["states"].value))
+                Block.from_identifier(
+                    block["name"].value,
+                    **_into_pyobj(block["states"].value),
+                    compability_version=_into_pyobj(block['version']),
+                )
                 for block in nbt["structure"]["palette"]["default"]["block_palette"]
             ]
         )
+
+        for block_index, block_eneity_data in nbt["structure"]["palette"]["default"][
+            "block_position_data"
+        ].items():
+            struct._palette[int(block_index)].add_extra_data(
+                _into_pyobj(block_eneity_data)
+            )
+            struct._special_block_indices.append(int(block_index))
 
         return struct
 
@@ -383,7 +432,13 @@ class Structure:
         with the corresponding block objects.
         """
         arr = np.full(
-            self._structure.shape, Block.from_identifier("minecraft:structure_void"), dtype=object
+            self._structure.shape,
+            Block(
+                "minecraft",
+                "structure_void",
+                compability_version=self.compability_version,
+            ),
+            dtype=object,
         )
         for key, block in enumerate(self._palette):
             arr[self._structure == key] = block
@@ -438,14 +493,28 @@ class Structure:
                                                             }
                                                         ),
                                                         version=TAG_Int(
-                                                            COMPABILITY_VERSION
+                                                            block.compability_version
                                                         ),
                                                     )
                                                 )
                                                 for block in self._palette
                                             ],
                                         ),
-                                        block_position_data=TAG_Compound({}),
+                                        block_position_data=TAG_Compound(
+                                            dict(
+                                                [
+                                                    (
+                                                        str(block_index),
+                                                        _into_tag(
+                                                            self._palette[
+                                                                block_index
+                                                            ].extra_data
+                                                        ),
+                                                    )
+                                                    for block_index in self._special_block_indices
+                                                ]
+                                            )
+                                        ),
                                     )
                                 )
                             )
