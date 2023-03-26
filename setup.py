@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="TrimMCStruct",
-    version="0.0.1",
+    version="0.0.2",
     author="Eilles Wan, bgArray, phoenixr-codes(original author) ",
     author_email="TriM-Organization@hotmail.com",
     description="读写操作《我的世界》.MCSTRUCTURE文件\n"
