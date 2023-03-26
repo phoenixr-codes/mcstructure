@@ -1,0 +1,108 @@
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/phoenixr-codes/mcstructure/main/logo.png"
+    width="120px"
+    align="center" alt="mcstructure logo"
+  />
+  <h1 align="center">mcstructure</h1>
+  <p align="center">
+    Read and write Minecraft <code>.mcstructure</code> files.
+  </p>
+</p>
+
+
+[![][GitHub: phoenixR]](https://github.com/phoenixr-codes)
+[![][Gitee: Eilles]](https://gitee.com/EillesWan)
+[![][GitHub: Eilles]](https://gitHub.com/EillesWan)
+[![][Bilibili: Eilles]](https://space.bilibili.com/397369002/)
+
+
+[![CodeStyle: black]](https://github.com/psf/black)
+[![][python]](https://www.python.org/)
+[![][license]](LICENSE)
+[![][release]](../../releases)
+
+
+[![GiteeStar](https://gitee.com/TriM-Organization/mcstructure/badge/star.svg?theme=gray)](https://gitee.com/TriM-Organization/mcstructure/stargazers)
+[![GiteeFork](https://gitee.com/TriM-Organization/mcstructure/badge/fork.svg?theme=gray)](https://gitee.com/TriM-Organization/mcstructure/members)
+[![GitHub Repo stars](https://img.shields.io/github/stars/TriM-Organization/TrimMCStruct?color=white&logo=GitHub&style=plastic)](https://github.com/TriM-Organization/TrimMCStruct/stargazers)
+[![GitHub Repo Forks](https://img.shields.io/github/forks/TriM-Organization/TrimMCStruct?color=white&logo=GitHub&style=plastic)](https://github.com/TriM-Organization/TrimMCStruct/forks)
+
+_In the entire project (and officially since 
+the "Better Together Update") the term
+"Minecraft" refers to the edition of Minecraft
+that is also known as "Bedrock Edition"._
+
+_Features that this library provide are only
+useful for the above named edition of Minecraft._
+
+> **Warning**
+> This project is currently in BETA Version. Most
+> features will probably not work.
+
+This library lets you programmatically create
+and edit Minecraft structures. You are able to
+save these as ``.mcstructure`` files and for
+example use them in behavior packs.
+
+You may aswell read them to identify blocks and
+and entities that were saved with a Structure
+Block in-game.
+
+
+Installation
+------------
+
+```bash
+pip install mcstructure
+```
+
+
+Basic Usage
+-----------
+
+```python
+from mcstructure import Block, Structure
+
+struct = Structure(
+    (7, 7, 7),
+    Block("minecraft:wool", color = "red")
+)
+
+(struct
+    .set_block((1, 1, 1), Block("minecraft","grass"))
+    .set_block((2, 2, 2), Block("minecraft","grass"))
+    .set_block((3, 3, 3), Block("minecraft","grass"))
+    .set_block((4, 4, 4), Block("minecraft","grass"))
+    .set_block((5, 5, 5), Block("minecraft","grass"))
+    .set_block((6, 6, 6), Block("minecraft","grass"))
+)
+
+with open("house.mcstructure", "wb") as f:
+    struct.dump(f)
+
+```
+
+```python
+with open("house.mcstructure", "rb") as f:
+    struct = Structure.load(f)
+
+```
+
+--------------------------------------------
+
+NOT AN OFFICIAL MINECRAFT PRODUCT.
+
+NOT APPROVED BY OR ASSOCIATED WITH MOJANG.
+
+
+[GitHub: phoenixR]: https://img.shields.io/badge/GitHub-phoenixR-00A1E7?style=plastic
+
+[Bilibili: Eilles]: https://img.shields.io/badge/Bilibili-%E5%87%8C%E4%BA%91%E9%87%91%E7%BE%BF-00A1E7?style=plastic
+[Gitee: Eilles]: https://img.shields.io/badge/Gitee-EillesWan-00A1E7?style=plastic
+[GitHub: Eilles]: https://img.shields.io/badge/GitHub-EillesWan-00A1E7?style=plastic
+
+[CodeStyle: black]: https://img.shields.io/badge/code%20style-black-121110.svg?style=plastic
+[python]: https://img.shields.io/badge/python-3.8-AB70FF?style=plastic
+[release]: https://img.shields.io/github/v/release/EillesWan/Musicreater?style=plastic
+[license]: https://img.shields.io/badge/Licence-Apache-228B22?style=plastic
