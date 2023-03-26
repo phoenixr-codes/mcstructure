@@ -72,7 +72,9 @@ def _into_tag(obj: Any) -> BaseTag:
             if not isinstance(value, BaseTag):
                 value = _into_tag(value)
             res.append(value)
-        return TAG_List(tag_type=(type(_into_tag(obj[0])) if obj else TAG_String),value=res)
+        return TAG_List(
+            tag_type=(type(_into_tag(obj[0])) if obj else TAG_String), value=res
+        )
 
     elif isinstance(obj, int):
         return TAG_Int(obj)
@@ -109,7 +111,7 @@ class Block:
     """
     Attributes
     ----------
-    name
+    base_name
         The name of the block.
 
     states
@@ -128,12 +130,12 @@ class Block:
     extra_data: dict[str, Union[int, str, bool]]
 
     def __init__(
-        self,
-        namespace: str,
-        base_name: str,
-        states: dict[str, Union[int, str, bool]] = {},
-        extra_data: dict[str, Union[int, str, bool]] = {},
-        compability_version: int = COMPABILITY_VERSION,
+            self,
+            namespace: str,
+            base_name: str,
+            states: dict[str, Union[int, str, bool]] = {},
+            extra_data: dict[str, Union[int, str, bool]] = {},
+            compability_version: int = COMPABILITY_VERSION,
     ):
         """
         Parameters
@@ -161,10 +163,10 @@ class Block:
 
     @classmethod
     def from_identifier(
-        cls,
-        identifier: str,
-        compability_version=COMPABILITY_VERSION,
-        **states: Union[int, str, bool],
+            cls,
+            identifier: str,
+            compability_version=COMPABILITY_VERSION,
+            **states: Union[int, str, bool],
     ):
         """
         Parameters
@@ -175,6 +177,9 @@ class Block:
         states
             The block states such as "color" or "stone_type".
             This varies by every block.
+
+        compability_version
+            It's not written here.
         """
 
         if ":" in identifier:
@@ -196,42 +201,42 @@ class Block:
         return self.dictionarify()
 
     def add_states(
-        self,
-        states: dict[str, Union[int, str, bool]],
+            self,
+            states: dict[str, Union[int, str, bool]],
     ) -> None:
         self.states.update(states)
 
     def add_extra_data(
-        self,
-        extra_data: dict[str, Union[int, str, bool]],
+            self,
+            extra_data: dict[str, Union[int, str, bool]],
     ) -> None:
         self.extra_data.update(extra_data)
 
     def dictionarify(self, *, with_states: bool = True) -> Dict[str, Any]:
         result = {
-            'name': self.identifier,
-            'states': self.states if with_states else {},
-            'version': self.compability_version,
+            "name": self.identifier,
+            "states": self.states if with_states else {},
+            "version": self.compability_version,
         }
 
         return result
 
     def dictionarify_with_block_entity(
-        self, *, with_states: bool = True
+            self, *, with_states: bool = True
     ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         result = {
-            'name': self.identifier,
-            'states': self.states if with_states else {},
-            'version': self.compability_version,
+            "name": self.identifier,
+            "states": self.states if with_states else {},
+            "version": self.compability_version,
         }
 
         return result, self.extra_data
 
     def stringify(
-        self,
-        *,
-        with_namespace: bool = True,
-        with_states: bool = True,
+            self,
+            *,
+            with_namespace: bool = True,
+            with_states: bool = True,
     ) -> str:
         result = ""
         if with_namespace:
@@ -245,13 +250,13 @@ class Block:
         """
         Returns the namespace and the name of the block.
         """
-        return (self.namespace, self.base_name)
+        return self.namespace, self.base_name
 
     def get_identifier(self) -> str:
         """
         Returns the identifier of the block.
         """
-        return self.namespace + ':' + self.base_name
+        return self.namespace + ":" + self.base_name
 
     def get_name(self) -> str:
         """
@@ -280,17 +285,17 @@ class Structure:
 
     Attributes
     ----------
-    size
+    _size
         The size of the structure.
     """
 
     structure_indecis: NDArray[np.intc]
 
     def __init__(
-        self,
-        size: tuple[int, int, int],
-        fill: Optional[Block] = None,
-        compability_version: int = COMPABILITY_VERSION,
+            self,
+            size: tuple[int, int, int],
+            fill: Optional[Block] = None,
+            compability_version: int = COMPABILITY_VERSION,
     ):
         """
         Parameters
@@ -352,7 +357,7 @@ class Structure:
                 Block.from_identifier(
                     block["name"].value,
                     **_into_pyobj(block["states"].value),
-                    compability_version=_into_pyobj(block['version']),
+                    compability_version=_into_pyobj(block["version"]),
                 )
                 for block in nbt["structure"]["palette"]["default"]["block_palette"]
             ]
@@ -371,7 +376,6 @@ class Structure:
     @property
     def size(self) -> tuple[int, int, int]:
         return self._size
-    
 
     def __repr__(self) -> str:
         return repr(self._get_str_array())
@@ -380,7 +384,7 @@ class Structure:
         return str(self._get_str_array())
 
     def _get_str_array(
-        self, *, with_namespace: bool = False, with_states: bool = False
+            self, *, with_namespace: bool = False, with_states: bool = False
     ) -> NDArray[Any]:
         """
         Returns a numpy array where each entry is a
@@ -463,11 +467,14 @@ class Structure:
                             TAG_List,
                             [
                                 TAG_List(
-                                    TAG_Int, map(TAG_Int, self.structure_indecis.flatten())
+                                    TAG_Int,
+                                    map(TAG_Int, self.structure_indecis.flatten()),
                                 ),
                                 TAG_List(
                                     TAG_Int,
-                                    map(TAG_Int, repeat(-1, self.structure_indecis.size)),
+                                    map(
+                                        TAG_Int, repeat(-1, self.structure_indecis.size)
+                                    ),
                                 ),
                             ],
                         ),
@@ -578,9 +585,9 @@ class Structure:
         return self._palette[self.structure_indecis[x, y, z]]
 
     def set_block(
-        self,
-        coordinate: Coordinate,
-        block: Optional[Block],
+            self,
+            coordinate: Coordinate,
+            block: Optional[Block],
     ) -> Structure:
         """
         Puts a block into the structure.
@@ -602,10 +609,10 @@ class Structure:
         return self
 
     def fill_blocks(
-        self,
-        from_coordinate: Coordinate,
-        to_coordinate: Coordinate,
-        block: Block,
+            self,
+            from_coordinate: Coordinate,
+            to_coordinate: Coordinate,
+            block: Block,
     ) -> Structure:
         """
         Puts multiple blocks into the structure.
@@ -631,7 +638,7 @@ class Structure:
 
         ident = self._add_block_to_palette(block)
         # print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
-        self.structure_indecis[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
+        self.structure_indecis[fx: tx + 1, fy: ty + 1, fz: tz + 1] = np.array(
             [
                 [
                     [ident for k in range(abs(fz - tz) + 1)]

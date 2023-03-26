@@ -4,7 +4,7 @@
 		width="120px"
 		align="center" alt="mcstructure logo"
 	/>
-	<h1 align="center">mcstructure</h1>
+	<h1 align="center">TrimMCStruct</h1>
 	<p align="center">
 		对于《我的世界》<code>.mcstructure</code> 文件的读写操作库
 	</p>
@@ -47,7 +47,7 @@ _此项目中的所有特性也是仅仅针对基岩版的。_
 ------------
 
 ```bash
-pip install mcstructure
+pip install TrimMCStruct
 ```
 
 
@@ -58,7 +58,7 @@ pip install mcstructure
 
 	```python
 	# 导入库
-	from mcstructure import Block, Structure
+	from TrimMCStruct import Block, Structure
 
 	# 实例化对象 Structure
 	struct = Structure(
