@@ -13,7 +13,7 @@ setuptools.setup(
     author="Eilles Wan, bgArray, phoenixr-codes(original author) ",
     author_email="TriM-Organization@hotmail.com",
     description="读写操作《我的世界》.MCSTRUCTURE文件\n"
-    " Read and write Minecraft .mcstructure files.",
+    "Read and write Minecraft .mcstructure files.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/TriM-Organization/TrimMCStruct",

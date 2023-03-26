@@ -626,10 +626,10 @@ class Structure:
         Parameters
         ----------
         from_coordinate
-            Relative coordinates of the start edge.
+            Relative coordinates of the start corner.
 
         to_coordinate
-            Relative coordinates of the end edge.
+            Relative coordinates of the end corner.
 
         block
             The block to place. If this is set to ``None``
