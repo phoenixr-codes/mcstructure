@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import setuptools
+import TrimMCStruct
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+with open("README.MD", "r", encoding="utf-8") as fh:
+    long_description = fh.read().replace(
+        "./docs/", "https://github.com/TriM-Organization/TrimMCStruct/blob/master/docs/"
+    )
 
 setuptools.setup(
     name="TrimMCStruct",
-    version="0.0.2",
+    version=TrimMCStruct.__version__,
     author="Eilles Wan, bgArray, phoenixr-codes(original author) ",
     author_email="TriM-Organization@hotmail.com",
     description="读写操作《我的世界》.MCSTRUCTURE文件\n"
@@ -23,8 +26,6 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
