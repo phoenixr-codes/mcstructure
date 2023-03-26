@@ -1,6 +1,6 @@
 <p align="center">
 	<img
-		src="https://gitee.com/TriM-Organization/mcstructure/raw/resources/logo.png"
+		src="https://gitee.com/TriM-Organization/mcstructure/raw/main/resources/logo.png"
 		width="120px"
 		align="center" alt="mcstructure logo"
 	/>

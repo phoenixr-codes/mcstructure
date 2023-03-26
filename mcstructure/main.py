@@ -8,10 +8,7 @@ Read and write Minecraft .mcstructure files.
 # TODO: test rotate
 # TODO: second layer (waterlogged blocks)
 # TODO: entities
-# TODO: rename set_blocks to fill_blocks or create alias
 # TODO: export as 3d model (might be extension)
-# TODO: add shadow to logo
-# TODO: change the main functions into main.py
 
 from __future__ import annotations
 
@@ -287,6 +284,8 @@ class Structure:
         The size of the structure.
     """
 
+    structure_indecis: NDArray[np.intc]
+
     def __init__(
         self,
         size: tuple[int, int, int],
@@ -308,17 +307,17 @@ class Structure:
 
             "minecraft:air" is used as default.
         """
-        self._structure: NDArray[np.intc]
+        self.structure_indecis: NDArray[np.intc]
 
         self._size = size
         self._palette: list[Block] = []
         self._special_block_indices: list[int] = []
 
         if fill is None:
-            self._structure = np.full(size, -1, dtype=np.intc)
+            self.structure_indecis = np.full(size, -1, dtype=np.intc)
 
         else:
-            self._structure = np.zeros(size, dtype=np.intc)
+            self.structure_indecis = np.zeros(size, dtype=np.intc)
             self._palette.append(fill)
 
         self.compability_version = compability_version
@@ -341,9 +340,9 @@ class Structure:
         # see https://wiki.bedrock.dev/nbt/mcstructure.html
         # of a .mcstructure file's NBT format
         # while Chinese developers could see my translation at
-        # https://gitee.com/TriM-Organization/Musicreater/blob/master/docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md
+        # ../docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md
 
-        struct._structure = np.array(
+        struct.structure_indecis = np.array(
             [_into_pyobj(x) for x in nbt["structure"]["block_indices"][0]],
             dtype=np.intc,
         ).reshape(size)
@@ -372,6 +371,7 @@ class Structure:
     @property
     def size(self) -> tuple[int, int, int]:
         return self._size
+    
 
     def __repr__(self) -> str:
         return repr(self._get_str_array())
@@ -429,10 +429,10 @@ class Structure:
     def get_structure(self) -> NDArray[Any]:
         """
         Returns the structure as a numpy array filled
-        with the corresponding block objects.
+        with the corresponding `Block` objects.
         """
         arr = np.full(
-            self._structure.shape,
+            self.structure_indecis.shape,
             Block(
                 "minecraft",
                 "structure_void",
@@ -441,7 +441,7 @@ class Structure:
             dtype=object,
         )
         for key, block in enumerate(self._palette):
-            arr[self._structure == key] = block
+            arr[self.structure_indecis == key] = block
         return arr
 
     def dump(self, file: BinaryIO) -> None:
@@ -463,11 +463,11 @@ class Structure:
                             TAG_List,
                             [
                                 TAG_List(
-                                    TAG_Int, map(TAG_Int, self._structure.flatten())
+                                    TAG_Int, map(TAG_Int, self.structure_indecis.flatten())
                                 ),
                                 TAG_List(
                                     TAG_Int,
-                                    map(TAG_Int, repeat(-1, self._structure.size)),
+                                    map(TAG_Int, repeat(-1, self.structure_indecis.size)),
                                 ),
                             ],
                         ),
@@ -538,9 +538,9 @@ class Structure:
             Use ``"X"``, ``"x"``,``"Z"`` or ``"z"``.
         """
         if axis in "Xx":
-            self._structure = self._structure[::-1, :, :]
+            self.structure_indecis = self.structure_indecis[::-1, :, :]
         elif axis in "Zz":
-            self._structure = self._structure[:, :, ::-1]
+            self.structure_indecis = self.structure_indecis[:, :, ::-1]
         else:
             raise ValueError(f"invalid argument for 'rotation' ({axis!r})")
         return self
@@ -556,11 +556,11 @@ class Structure:
             or ``270`` degrees.
         """
         if by == 90:
-            self._structure = np.rot90(self._structure, k=1, axes=(0, 1))
+            self.structure_indecis = np.rot90(self.structure_indecis, k=1, axes=(0, 1))
         elif by == 180:
-            self._structure = np.rot90(self._structure, k=2, axes=(0, 1))
+            self.structure_indecis = np.rot90(self.structure_indecis, k=2, axes=(0, 1))
         elif by == 270:
-            self._structure = np.rot90(self._structure, k=3, axes=(0, 1))
+            self.structure_indecis = np.rot90(self.structure_indecis, k=3, axes=(0, 1))
         else:
             raise ValueError(f"invalid argument for 'by' ({by!r})")
         return self
@@ -575,7 +575,7 @@ class Structure:
             The coordinte of the block.
         """
         x, y, z = coordinate
-        return self._palette[self._structure[x, y, z]]
+        return self._palette[self.structure_indecis[x, y, z]]
 
     def set_block(
         self,
@@ -598,10 +598,10 @@ class Structure:
 
         ident = self._add_block_to_palette(block)
 
-        self._structure[x, y, z] = ident
+        self.structure_indecis[x, y, z] = ident
         return self
 
-    def set_blocks(
+    def fill_blocks(
         self,
         from_coordinate: Coordinate,
         to_coordinate: Coordinate,
@@ -631,7 +631,7 @@ class Structure:
 
         ident = self._add_block_to_palette(block)
         # print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
-        self._structure[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
+        self.structure_indecis[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
             [
                 [
                     [ident for k in range(abs(fz - tz) + 1)]
