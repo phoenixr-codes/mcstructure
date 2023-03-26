@@ -1,4 +1,4 @@
-from mcstructure import Block
+from TrimMCStruct import Block
 
 def test_stringify():
     b = Block("minecraft","wool", {"color":"red"})

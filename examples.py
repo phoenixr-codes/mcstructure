@@ -1,4 +1,4 @@
-from src.mcstructure import Block, Structure
+from TrimMCStruct import Block, Structure
 
 struct = Structure(
     (6, 6, 6),  # Size of the Structure     声明结构大小，注意这是大小，其坐标从0开始

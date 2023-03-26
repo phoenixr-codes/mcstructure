@@ -62,7 +62,7 @@ Basic Usage
 -----------
 
 ```python
-from mcstructure import Block, Structure
+from TrimMCStruct import Block, Structure
 
 struct = Structure(
     (7, 7, 7),

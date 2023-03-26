@@ -173,7 +173,7 @@ file_path = format_ipt("file_path: ",os.path.exists,"Err: not found")[0]
 with open(file_path,'rb+') as f:
     nbt = NBTFile(f, little_endian=True)
 
-from mcstructure import _into_pyobj
+from TrimMCStruct import _into_pyobj
 
 prt(_into_pyobj(nbt))
 
