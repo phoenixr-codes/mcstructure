@@ -77,6 +77,15 @@ with open("house.mcstructure", "rb") as f:
     struct = Structure.load(f)
 ```
 
+
+Useful Links
+------------
+
+* [👋 Introduction to Structure Blocks](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* [📖 Documentation](https://phoenixr-codes.github.io/mcstructure/)
+* [📁 Source Code](https://github.com/phoenixr-codes/mcstructure)
+* [🐍 PyPI](https://pypi.org/project/mcstructure/)
+
 --------------------------------------------
 
 NOT AN OFFICIAL MINECRAFT PRODUCT.
