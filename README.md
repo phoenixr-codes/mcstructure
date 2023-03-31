@@ -82,6 +82,7 @@ Useful Links
 ------------
 
 * [👋 Introduction to Structure Blocks](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* [📖 Bedrock Wiki](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
 * [📖 Documentation](https://phoenixr-codes.github.io/mcstructure/)
 * [📁 Source Code](https://github.com/phoenixr-codes/mcstructure)
 * [🐍 PyPI](https://pypi.org/project/mcstructure/)
