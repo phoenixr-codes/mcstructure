@@ -30,6 +30,8 @@ useful for the above named edition of Minecraft._
 > This project is currently in BETA Version. Most
 > features will probably not work.
 
+<!-- start elevator-pitch -->
+
 This library lets you programmatically create
 and edit Minecraft structures. You are able to
 save these as ``.mcstructure`` files and for
@@ -39,6 +41,7 @@ You may as well read them to identify blocks and
 and entities that were saved with a Structure
 Block in-game.
 
+<!-- end elevator-pitch -->
 
 Installation
 ------------
