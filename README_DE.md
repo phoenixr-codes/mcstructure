@@ -36,7 +36,7 @@ Diese können dann als ``.mcstructure``-Datei
 gespeichert werden und beispielsweise in einem
 Verhaltenspaket genutzt werden.
 
-Es ist auch möglich Blöcke und Entitäten zu
+Es ist auch möglich, Blöcke und Entitäten zu
 identifizieren, welche mit einem Konstruktionsblock
 innerhalb des Spiels gespeichert wurden.
 
