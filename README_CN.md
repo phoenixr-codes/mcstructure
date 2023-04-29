@@ -10,7 +10,14 @@
 	</p>
 </p>
 
-*在此项目中（且更官方地是在“大一统更新”("Better Together Update")之后）专有名词《我的世界》("Minecraft")所指代的均为基岩版("Bedrock Edition")。*
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+此介绍文件亦可见翻译：
+
+* [🇪🇳 英文](./README.md)
+* [🇩🇪 德文](./README_DE.md)
+
+*在整个项目中（且更官方地是在“大一统更新”("Better Together Update")之后）专有名词《我的世界》("Minecraft")所指代的均为基岩版("Bedrock Edition")。*
 
 _此项目中的所有特性也是仅仅针对基岩版的。_
 
@@ -71,6 +78,16 @@ pip install mcstructure
 		struct = Structure.load(f)
 
 	```
+
+妙用链接
+------------
+
+* [👋 结构方块的简介](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* [📖 基岩版维基](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
+_译注：文件结构文档已经被我翻译了，详见[我的译本](https://gitee.com/TriM-Organization/mcstructure/blob/main/docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md)_
+* [📖 此项目之文档](https://phoenixr-codes.github.io/mcstructure/)
+* [📁 此项目之源码](https://github.com/phoenixr-codes/mcstructure)
+* [🐍 PyPI](https://pypi.org/project/mcstructure/)
 
 --------------------------------------------
 

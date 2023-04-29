@@ -15,8 +15,8 @@
 Diese README-Datei ist auch in den folgenden
 Sprachen verfügbar:
 
-* [🇨🇳 Chinesisch](https://github.com/phoenixr-codes/mcstructure/blob/main/README_CN.md)
-* [🇬🇧 Englisch](https://github.com/phoenixr-codes/mcstructure/blob/main/README.md)
+* [🇨🇳 Chinesisch](./README_CN.md)
+* [🇬🇧 Englisch](./README.md)
 
 _Im gesamten Projekt (und offiziell seit dem
 "Better Together Update") ist mit "Minecraft"
