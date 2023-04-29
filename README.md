@@ -15,8 +15,8 @@
 This README is also available in the following
 languages:
 
-* [🇨🇳 Chinese](https://github.com/phoenixr-codes/mcstructure/blob/main/README_CN.md) *(outdated)*
-* [🇩🇪 German](https://github.com/phoenixr-codes/mcstructure/blob/main/README_DE.md)
+* [🇨🇳 Chinese](./README_CN.md)
+* [🇩🇪 German](./README_DE.md)
 
 _In the entire project (and officially since 
 the "Better Together Update") the term
