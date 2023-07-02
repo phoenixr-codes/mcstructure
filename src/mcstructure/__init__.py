@@ -1,7 +1,8 @@
 """
-Read and write Minecraft .mcstructure files.
+Read and write Minecraft ``.mcstructure`` files.
 """
 
+# TODO: use x | None instead of Optional[x]
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
 # TODO: make Structure._structure public
 # TODO: test mirror
@@ -29,6 +30,11 @@ Coordinate = Tuple[int, int, int]
 
 
 COMPABILITY_VERSION: int = 17959425
+"""
+The compability version for a block. The four bytes making up this
+integer determine the game version number. For example, ``17879555`` is
+``01 10 D2 03`` in hex meaning ``1.16.210.03``.
+"""
 
 
 def _into_pyobj(tag: BaseTag) -> Any:
@@ -106,11 +112,8 @@ class Block:
     -------
     .. code-block::
 
-        Block("minecraft:wool", color = "red")
+        Block("minecraft:wool", color="red")
     """
-
-    identifier: str
-    states: dict[str, Any]
 
     def __init__(self, identifier: str, **states: Any):
         """
@@ -120,8 +123,10 @@ class Block:
             The identifier of the block (e.g. "minecraft:wool").
 
         states
-            The block states such as "color" or "stone_type".
+            The block states such as ``color`` or ``stone_type``.
             This varies by every block.
+
+            .. seealso:: https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockstateslist
         """
         self.identifier = identifier
         self.states = states
@@ -135,6 +140,16 @@ class Block:
         with_namespace: bool = True,
         with_states: bool = True,
     ) -> str:
+        """Returns a human-readable representation of the structure.
+
+        Parameters
+        ----------
+        with_namespace
+            Whether to include the block's namespace.
+
+        with_states
+            Whether to include the block's states.
+        """
         result = ""
         if with_namespace and (ns := self.get_namespace()) is not None:
             result += ns + ":"
@@ -170,11 +185,6 @@ class Structure:
     """
     Class representing a Minecraft structure that
     consists of blocks and entities.
-
-    Attributes
-    ----------
-    size
-        The size of the structure.
     """
 
     def __init__(
@@ -193,7 +203,7 @@ class Structure:
             If this is set to ``None`` the structure
             is filled with "Structure Void" blocks.
 
-            "minecraft:air" is used as default.
+            ``'minecraft:air'`` is used as default.
         """
         self._structure: NDArray[np.intc]
 
@@ -238,6 +248,7 @@ class Structure:
 
     @property
     def size(self) -> tuple[int, int, int]:
+        """The size of the structure."""
         return self._size
 
     def __repr__(self) -> str:
