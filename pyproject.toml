@@ -30,8 +30,9 @@ keywords = [
 
 [project.optional-dependencies]
 docs = [
-    "Sphinx<5,>3",
-    "sphinx-book-theme>=0.3",
+    "furo",
+    "myst-parser>=2",
+    "Sphinx>=7",
 ]
 
 [project.urls]
