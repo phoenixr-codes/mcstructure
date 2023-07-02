@@ -33,6 +33,7 @@ docs = [
     "furo",
     "myst-parser>=2",
     "Sphinx>=7",
+    "sphinx-copybutton>=0",
 ]
 
 [project.urls]
