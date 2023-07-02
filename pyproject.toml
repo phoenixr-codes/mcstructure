@@ -37,7 +37,7 @@ docs = [
 ]
 
 [project.urls]
-"Documentation" = "https://phoenixr-codes.github.io/mcstructure/"
+"Documentation" = "https://mcstructure.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/phoenixr-codes/mcstructure/"
 
 
