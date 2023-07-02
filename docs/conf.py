@@ -17,12 +17,17 @@ release = '0.0.1b4'
 
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
 
     'myst_parser',
     'sphinx_copybutton',
 ]
 
+###########################
+# Intersphinx Configuration
+
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 #######################
 # Autodoc Configuration

@@ -7,12 +7,18 @@
 
 ```{toctree}
 ---
+caption: Introduction
+maxdepth: 2
+---
+installation
+quickstart
+```
+
+```{toctree}
+---
 caption: Content
 maxdepth: 2
 ---
-introduction
-installation
-quickstart
 api
 ```
 
@@ -21,8 +27,7 @@ api
 caption: Development
 maxdepth: 2
 ---
-contributing/index
+contributing
 changelog
-license
 ```
 
