@@ -1,5 +1,5 @@
 """
-Read and write Minecraft .mcstructure files.
+Read and write Minecraft ``.mcstructure`` files.
 """
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
