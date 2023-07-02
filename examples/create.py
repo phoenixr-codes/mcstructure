@@ -2,7 +2,7 @@ from mcstructure import Block, Structure
 
 struct = Structure(
     (6, 6, 6),  # Size of the Structure     声明结构大小，注意这是大小，其坐标从0开始
-    Block("minecraft:air")  # pre-fill blocks   预填充方块
+    Block("minecraft:air"),  # pre-fill blocks   预填充方块
 )
 
 # fill blocks  填充方块
