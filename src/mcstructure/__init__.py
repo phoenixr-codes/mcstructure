@@ -2,7 +2,6 @@
 Read and write Minecraft ``.mcstructure`` files.
 """
 
-# TODO: use x | None instead of Optional[x]
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
 # TODO: make Structure._structure public
 # TODO: test mirror
@@ -20,7 +19,7 @@ from dataclasses import dataclass
 from functools import partial
 from itertools import repeat
 import json
-from typing import Any, BinaryIO, Optional, Tuple
+from typing import Any, BinaryIO, Tuple
 
 import numpy as np
 from numpy.typing import NDArray
@@ -158,7 +157,7 @@ class Block:
             result += f" [{json.dumps(self.states)[1:-1]}]"
         return result
 
-    def get_namespace_and_name(self) -> tuple[Optional[str], str]:
+    def get_namespace_and_name(self) -> tuple[str | None, str]:
         """
         Returns the namespace and the name of the block.
         """
@@ -174,7 +173,7 @@ class Block:
         """
         return self.get_namespace_and_name()[1]
 
-    def get_namespace(self) -> Optional[str]:
+    def get_namespace(self) -> str | None:
         """
         Returns the namespace of the block.
         """
@@ -188,7 +187,7 @@ class Structure:
     """
 
     def __init__(
-        self, size: tuple[int, int, int], fill: Optional[Block] = Block("minecraft:air")
+        self, size: tuple[int, int, int], fill: Block | None = Block("minecraft:air")
     ):
         """
         Parameters
@@ -280,7 +279,7 @@ class Structure:
         )
         return vec(arr)
 
-    def _add_block_to_palette(self, block: Optional[Block]) -> int:
+    def _add_block_to_palette(self, block: Block | None) -> int:
         """
         Adds a block to the palette.
 
@@ -423,7 +422,7 @@ class Structure:
             raise ValueError(f"invalid argument for 'by' ({by!r})")
         return self
 
-    def get_block(self, coordinate: Coordinate) -> Optional[Block]:
+    def get_block(self, coordinate: Coordinate) -> Block | None:
         """
         Returns the block in a specific position.
 
@@ -438,7 +437,7 @@ class Structure:
     def set_block(
         self,
         coordinate: Coordinate,
-        block: Optional[Block],
+        block: Block | None,
     ) -> Structure:
         """
         Puts a block into the structure.
