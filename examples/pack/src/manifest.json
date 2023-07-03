@@ -1,0 +1,16 @@
+{
+  "format_version": 2,
+  "header": {
+	  "name": "mcstructure python",
+	  "uuid": "41e1112d-279f-46fa-9a57-9d8452ef8eef",
+	  "version": [1, 0, 0],
+	  "min_engine_version": [1, 16, 0]
+  },
+  "modules": [
+	  {
+	    "type": "data",
+	    "uuid": "a6510d79-f45e-4ae8-b398-964b410f3433",
+	    "version": [1, 0, 0]
+	  }
+  ]
+}
