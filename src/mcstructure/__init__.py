@@ -113,6 +113,8 @@ class Block:
 
         Block("minecraft:wool", color="red")
     """
+    identifier: str
+    states: dict[str, Any]
 
     def __init__(self, identifier: str, **states: Any):
         """
