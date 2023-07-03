@@ -13,5 +13,5 @@ print(struct.get_structure())
 print(struct._get_str_array(with_namespace=False, with_states=True))
 
 # write into file  写入文件
-with open("structures/created_with_python.mcstructure", "wb") as f:
+with open("structures/my_create.mcstructure", "wb") as f:
     struct.dump(f)
