@@ -25,6 +25,7 @@ import numpy as np
 from numpy.typing import NDArray
 from pynbt import BaseTag, NBTFile, TAG_Compound, TAG_Int, TAG_List, TAG_String  # type: ignore
 
+
 Coordinate = Tuple[int, int, int]
 
 
@@ -35,7 +36,11 @@ integer determine the game version number. For example, ``17879555`` is
 ``01 10 D2 03`` in hex meaning ``1.16.210.03``.
 """
 
+STRUCTURE_MAX_SIZE: tuple[int, int, int] = (64, 384, 64)
+"""The maximum size a structure can have."""
 
+
+# TODO: cover all tags
 def _into_pyobj(tag: BaseTag) -> Any:
     """
     Turns an NBT tree into a python tree.
@@ -62,6 +67,7 @@ def _into_pyobj(tag: BaseTag) -> Any:
     return tag
 
 
+# TODO: cover all types
 def _into_tag(obj: Any) -> BaseTag:
     """
     Turn a python tree into an NBT tree.
@@ -96,6 +102,14 @@ def is_valid_structure_name(name: str, *, with_prefix: bool = False) -> bool:
     return all((char.isalnum() and char in "-_") for char in name)
 
 
+def has_valid_size(size: tuple[int, int, int]) -> bool:
+    """Returns ``False`` if ``size`` is too big.
+
+    .. seealso:: :const:`STRUCTURE_MAX_SIZE`
+    """
+    return all(map(lambda n: n[0] <= n[1], zip(size, STRUCTURE_MAX_SIZE)))
+
+
 @dataclass(init=False)
 class Block:
     """
@@ -107,12 +121,15 @@ class Block:
     states
         The states of the block.
 
-    Example
-    -------
+    Examples
+    --------
     .. code-block::
 
         Block("minecraft:wool", color="red")
+        Block("minecraft:grass")
+
     """
+
     identifier: str
     states: dict[str, Any]
 
@@ -152,16 +169,31 @@ class Block:
             Whether to include the block's states.
         """
         result = ""
-        if with_namespace and (ns := self.get_namespace()) is not None:
+        if with_namespace and (ns := self.namespace) is not None:
             result += ns + ":"
-        result += self.get_name()
+        result += self.name
         if with_states:
             result += f" [{json.dumps(self.states)[1:-1]}]"
         return result
 
-    def get_namespace_and_name(self) -> tuple[str | None, str]:
-        """
-        Returns the namespace and the name of the block.
+    @property
+    def namespace_and_name(self) -> tuple[str | None, str]:
+        """The namespace and the name of the block.
+
+        Examples
+        --------
+        .. code-block:: python
+
+            >>> from mcstructure import Block
+            >>>
+            >>> block = Block("minecraft:wool", color="red")
+            >>> block.namespace_and_name
+            ("minecraft", "wool")
+            >>>
+            >>> block = Block("foobar")
+            >>> block.namespace_and_name
+            (None, "foobar")
+
         """
         if ":" in self.identifier:
             ns, name = self.identifier.split(":", 1)
@@ -169,17 +201,47 @@ class Block:
 
         return (None, self.identifier)
 
-    def get_name(self) -> str:
-        """
-        Returns the name of the block.
-        """
-        return self.get_namespace_and_name()[1]
+    @property
+    def name(self) -> str:
+        """The name of the block.
 
-    def get_namespace(self) -> str | None:
+        Examples
+        --------
+        .. code-block:: python
+
+                >>> from mcstructure import Block
+                >>>
+                >>> block = Block("minecraft:wool", color="red")
+                >>> block.name
+                "wool"
+                >>>
+                >>> block = Block("foobar")
+                >>> block.name
+                "foobar"
+
         """
-        Returns the namespace of the block.
+        return self.namespace_and_name[1]
+
+    @property
+    def namespace(self) -> str | None:
+        """The namespace of the block.
+
+        Examples
+        --------
+        .. code-block:: python
+
+                >>> from mcstructure import Block
+                >>>
+                >>> block = Block("minecraft:wool", color="red")
+                >>> block.namespace
+                "minecraft"
+                >>>
+                >>> block = Block("foobar")
+                >>> (block.namespace,)
+                (None,)
+
         """
-        return self.get_namespace_and_name()[0]
+        return self.namespace_and_name[0]
 
 
 class Structure:
@@ -193,8 +255,10 @@ class Structure:
     """
 
     def __init__(
-        self, size: tuple[int, int, int], fill: Block | None = Block("minecraft:air")
-    ):
+        self,
+        size: tuple[int, int, int],
+        fill: Block | None = Block("minecraft:air"),
+    ) -> None:
         """
         Parameters
         ----------
@@ -210,6 +274,9 @@ class Structure:
 
             ``'minecraft:air'`` is used as default.
         """
+        if not has_valid_size(size):
+            raise ValueError(f"structure too large, max size: {STRUCTURE_MAX_SIZE}")
+
         self.structure: NDArray[np.intc]
 
         self._size = size
@@ -225,7 +292,16 @@ class Structure:
     @classmethod
     def load(cls, file: BinaryIO):
         """
-        Loads an mcstructure file.
+        Loads a structure from a file.
+
+        Examples
+        --------
+        .. code-block:: python
+
+            from mcstructure import Structure
+
+            with open("house.mcstructure", "rb") as f:
+                struct = Structure.load(f)
 
         Parameters
         ----------
@@ -259,8 +335,8 @@ class Structure:
     @property
     def palette(self) -> list[Block]:
         """A copy of the palette."""
-        l = self._palette.copy()
-        return l
+        palette = self._palette.copy()
+        return palette
 
     def __repr__(self) -> str:
         return repr(self._get_str_array())
@@ -329,7 +405,17 @@ class Structure:
 
     def dump(self, file: BinaryIO) -> None:
         """
-        Serialize the structure as a ``mcstructure``.
+        Serialize the structure as a NBT file.
+
+        Examples
+        --------
+        .. code-block:: python
+
+            from mcstructure import Structure
+
+            struct = Structure((5, 5, 5), None)
+            with open("house.mcstructure", "wb") as f:
+                struct.dump(f)
 
         Parameters
         ----------
@@ -396,46 +482,6 @@ class Structure:
         )
         nbt.save(file, little_endian=True)
 
-    '''
-    def mirror(self, axis: str) -> Structure:
-        """
-        Flips the structure.
-
-        Parameters
-        ----------
-        axis
-            Turn the structure either the ``X`` or ``Z`` axis.
-            Use ``"X"``, ``"x"``,``"Z"`` or ``"z"``.
-        """
-        if axis in "Xx":
-            self._structure = self._structure[::-1, :, :]
-        elif axis in "Zz":
-            self._structure = self._structure[:, :, ::-1]
-        else:
-            raise ValueError(f"invalid argument for 'rotation' ({axis!r})")
-        return self
-
-    def rotate(self, by: int) -> Structure:
-        """
-        Rotates the structure.
-
-        Parameters
-        ----------
-        by
-            Rotates the structure by ``90``, ``180``
-            or ``270`` degrees.
-        """
-        if by == 90:
-            self._structure = np.rot90(self._structure, k=1, axes=(0, 1))
-        elif by == 180:
-            self._structure = np.rot90(self._structure, k=2, axes=(0, 1))
-        elif by == 270:
-            self._structure = np.rot90(self._structure, k=3, axes=(0, 1))
-        else:
-            raise ValueError(f"invalid argument for 'by' ({by!r})")
-        return self
-    '''
-
     def get_block(self, coordinate: Coordinate) -> Block | None:
         """
         Returns the block in a specific position.
@@ -454,7 +500,7 @@ class Structure:
         block: Block | None,
     ) -> Structure:
         """
-        Puts a block into the structure.
+        Places a block in the structure.
 
         Parameters
         ----------
@@ -479,11 +525,11 @@ class Structure:
         block: Block,
     ) -> Structure:
         """
-        Puts multiple blocks into the structure.
+        Fills an area in the structure with blocks.
 
         Notes
         -----
-        Both start and end points are filled.
+        Both start and end points are included.
 
         Parameters
         ----------
@@ -501,7 +547,6 @@ class Structure:
         tx, ty, tz = to_coordinate
 
         ident = self._add_block_to_palette(block)
-        #print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
         self.structure[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
             [
                 [

@@ -18,7 +18,4 @@ print(f"building v{version} ...")
 
 with zipfile.ZipFile(f"build/{NAME}-v{version}.mcpack", "w") as archive:
     for path in src.rglob("*"):
-        archive.write(
-            path,
-            arcname=path.relative_to(src)
-        )
+        archive.write(path, arcname=path.relative_to(src))
