@@ -11,7 +11,7 @@ with open("house.mcstructure", "rb") as f:
     struct = Structure.load(f)
 ```
 
-Alternatively, create a new empty structure.
+Alternatively, create a new empty structure:
 
 ```python
 from mcstructure import Block, Structure
