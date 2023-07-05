@@ -6,15 +6,15 @@ def get() -> Structure:
 
 struct = get()
 struct.rotate(90)
-with open("structures/my_house.mcstructure90", "wb") as f:
+with open("structures/my_house90.mcstructure", "wb") as f:
     struct.dump(f)
 
 struct = get()
 struct.rotate(180)
-with open("structures/my_house.mcstructure180", "wb") as f:
+with open("structures/my_house180.mcstructure", "wb") as f:
     struct.dump(f)
 
 struct = get()
 struct.rotate(270)
-with open("structures/my_house.mcstructure270", "wb") as f:
+with open("structures/my_house270.mcstructure", "wb") as f:
     struct.dump(f)
