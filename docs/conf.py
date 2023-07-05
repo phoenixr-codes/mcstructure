@@ -9,7 +9,7 @@
 project = "mcstructure"
 copyright = "2023, Jonas da Silva"
 author = "Jonas da Silva"
-release = "0.0.1b4"
+release = "0.0.1b5"
 
 
 ###############
