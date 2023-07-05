@@ -85,7 +85,7 @@ pip install mcstructure
 * [👋 结构方块的简介](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
 * [📖 基岩版维基](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
 _译注：文件结构文档已经被我翻译了，详见[我的译本](https://gitee.com/TriM-Organization/mcstructure/blob/main/docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md)_
-* [📖 此项目之文档](https://phoenixr-codes.github.io/mcstructure/)
+* [📖 此项目之文档](https://mcstructure.readthedocs.io/en/latest/)
 * [📁 此项目之源码](https://github.com/phoenixr-codes/mcstructure)
 * [🐍 PyPI](https://pypi.org/project/mcstructure/)
 
