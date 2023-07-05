@@ -4,6 +4,7 @@ Read and write Minecraft ``.mcstructure`` files.
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
 # TODO: maybe make Block attributes properties
+# TODO: rename structure attr to blocks or something similar
 # TODO: make Structure._structure public
 # TODO: second layer (waterlogged blocks)
 # TODO: additional block data
@@ -182,9 +183,13 @@ class Block:
 
 
 class Structure:
-    """
-    Class representing a Minecraft structure that
-    consists of blocks and entities.
+    """Class representing a Minecraft structure that consists of blocks and entities.
+
+    Attributes
+    ----------
+    structure
+        The numpy array representing the blocks in the structure. Each entry is an ID
+        associated with a block present in :meth:`palette`.
     """
 
     def __init__(
@@ -250,6 +255,12 @@ class Structure:
     def size(self) -> tuple[int, int, int]:
         """The size of the structure."""
         return self._size
+
+    @property
+    def palette(self) -> list[Block]:
+        """A copy of the palette."""
+        l = self._palette.copy()
+        return l
 
     def __repr__(self) -> str:
         return repr(self._get_str_array())
