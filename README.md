@@ -27,8 +27,8 @@ _Features that this library provide are only
 useful for the above named edition of Minecraft._
 
 > **Warning**
-> This project is currently in BETA Version. Most
-> features will probably not work.
+> This project is currently in the **BETA** version. Some
+> features may not work as expected.
 
 <!-- start elevator-pitch -->
 
