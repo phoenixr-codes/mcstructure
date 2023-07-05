@@ -10,13 +10,19 @@
   </p>
 </p>
 
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
-This README is also available in the following
+🌍 This README is also available in the following
 languages:
 
 * [🇨🇳 Chinese](./README_CN.md)
 * [🇩🇪 German](./README_DE.md)
+
+<!-- Not really accessible ♿️ but we get a better line
+than the default "<hr/>" or "---" --> 
+<h2></h2>
+
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
+[![Documentation Status](https://readthedocs.org/projects/mcstructure/badge/?style=for-the-badge&version=latest)](https://mcstructure.readthedocs.io/en/latest/?badge=latest)
+[![PyPI](https://img.shields.io/pypi/v/mcstructure?style=for-the-badge)](https://pypi.org/project/mcstructure)
 
 _In the entire project (and officially since 
 the "Better Together Update") the term
