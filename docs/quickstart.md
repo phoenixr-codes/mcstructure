@@ -1,12 +1,25 @@
 # Quickstart
 
-## Loading a Structure
+## Loading/Initializing a Structure
+
+You can load a pre-existing structure by using the {py:meth}`mcstructure.Structure.load` method.
 
 ```python
 from mcstructure import Structure
 
 with open("house.mcstructure", "rb") as f:
     struct = Structure.load(f)
+```
+
+Alternatively, create a new empty structure.
+
+```python
+from mcstructure import Block, Structure
+
+struct = Structure(
+    (12, 20, 5),  # size of the structure
+    Block("minecraft:wool", color="red")  # fill the structure with red wool
+)
 ```
 
 
@@ -21,13 +34,24 @@ struct.get_structure()  # Get the numpy array representing the structure
 
 ## Modifying a Structure
 
+Simple modifications such as placing blocks:
+
 ```python
 from mcstructure import Block
 
-struct.mirror("x")  # Mirror the structure on the x axis
-struct.rotate(90)  # Rotate the structure by 90 degrees
-struct.set_block((1, 1, 1), Block("minecraft:wool", color="red"))  # Puts a red wool block at (1, 1, 1)
-struct.set_blocks((1, 1, 1), (5, 5, 5), Block("minecraft:wool", color="red"))  # Puts red wool blocks from (1, 1, 1) to (5, 5, 5)
+struct.set_block((1, 1, 1), Block("minecraft:wool", color="red"))  # Places a red wool block at (1, 1, 1)
+struct.set_blocks((1, 1, 1), (5, 5, 5), Block("minecraft:wool", color="red"))  # Places red wool blocks from (1, 1, 1) to (5, 5, 5)
+```
+
+Advanced modifications can be achieved with [numpy](https://numpy.org/doc/stable/index.html).
+A structure object consists of an array of integers representing IDs. Each ID is associated
+with a {py:class}`mcstructure.Block` in a list.
+
+```python
+import numpy as np
+
+np.rot90(struct.structure)
+struct.structure 
 ```
 
 
