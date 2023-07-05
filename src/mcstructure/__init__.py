@@ -3,9 +3,8 @@ Read and write Minecraft ``.mcstructure`` files.
 """
 
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
+# TODO: maybe make Block attributes properties
 # TODO: make Structure._structure public
-# TODO: test mirror
-# TODO: test rotate
 # TODO: second layer (waterlogged blocks)
 # TODO: additional block data
 # TODO: entities
@@ -206,16 +205,16 @@ class Structure:
 
             ``'minecraft:air'`` is used as default.
         """
-        self._structure: NDArray[np.intc]
+        self.structure: NDArray[np.intc]
 
         self._size = size
         self._palette: list[Block] = []
 
         if fill is None:
-            self._structure = np.full(size, -1, dtype=np.intc)
+            self.structure = np.full(size, -1, dtype=np.intc)
 
         else:
-            self._structure = np.zeros(size, dtype=np.intc)
+            self.structure = np.zeros(size, dtype=np.intc)
             self._palette.append(fill)
 
     @classmethod
@@ -233,7 +232,7 @@ class Structure:
 
         struct = cls(size)
 
-        struct._structure = np.array(
+        struct.structure = np.array(
             [_into_pyobj(x) for x in nbt["structure"]["block_indices"][0]],
             dtype=np.intc,
         ).reshape(size)
@@ -311,10 +310,10 @@ class Structure:
         with the corresponding block objects.
         """
         arr = np.full(
-            self._structure.shape, Block("minecraft:structure_void"), dtype=object
+            self.structure.shape, Block("minecraft:structure_void"), dtype=object
         )
         for key, block in enumerate(self._palette):
-            arr[self._structure == key] = block
+            arr[self.structure == key] = block
         return arr
 
     def dump(self, file: BinaryIO) -> None:
@@ -336,11 +335,11 @@ class Structure:
                             TAG_List,
                             [
                                 TAG_List(
-                                    TAG_Int, map(TAG_Int, self._structure.flatten())
+                                    TAG_Int, map(TAG_Int, self.structure.flatten())
                                 ),
                                 TAG_List(
                                     TAG_Int,
-                                    map(TAG_Int, repeat(-1, self._structure.size)),
+                                    map(TAG_Int, repeat(-1, self.structure.size)),
                                 ),
                             ],
                         ),
@@ -386,6 +385,7 @@ class Structure:
         )
         nbt.save(file, little_endian=True)
 
+    '''
     def mirror(self, axis: str) -> Structure:
         """
         Flips the structure.
@@ -423,6 +423,7 @@ class Structure:
         else:
             raise ValueError(f"invalid argument for 'by' ({by!r})")
         return self
+    '''
 
     def get_block(self, coordinate: Coordinate) -> Block | None:
         """
@@ -434,7 +435,7 @@ class Structure:
             The coordinte of the block.
         """
         x, y, z = coordinate
-        return self._palette[self._structure[x, y, z]]
+        return self._palette[self.structure[x, y, z]]
 
     def set_block(
         self,
@@ -457,7 +458,7 @@ class Structure:
 
         ident = self._add_block_to_palette(block)
 
-        self._structure[x, y, z] = ident
+        self.structure[x, y, z] = ident
         return self
 
     def set_blocks(
@@ -489,8 +490,8 @@ class Structure:
         tx, ty, tz = to_coordinate
 
         ident = self._add_block_to_palette(block)
-        # print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
-        self._structure[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
+        #print([[[ident for k in range(abs(fz-tz)+1) ]for j in range(abs(fy-ty)+1)]for i in range(abs(fx-tx)+1)])
+        self.structure[fx : tx + 1, fy : ty + 1, fz : tz + 1] = np.array(
             [
                 [
                     [ident for k in range(abs(fz - tz) + 1)]
