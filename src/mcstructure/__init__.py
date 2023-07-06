@@ -5,12 +5,11 @@ Read and write Minecraft ``.mcstructure`` files.
 # TODO: coordinates might be in wrong order (XYZ -> ZYX)
 # TODO: maybe make Block attributes properties
 # TODO: rename structure attr to blocks or something similar
-# TODO: make Structure._structure public
-# TODO: second layer (waterlogged blocks)
-# TODO: additional block data
-# TODO: entities
-# TODO: rename set_blocks to fill_blocks or create alias
-# TODO: export as 3d model (might be extension)
+# TODO: support second layer (waterlogged blocks)
+# TODO: support additional block data
+# TODO: support entities
+# TODO: rename set_blocks to fill_blocks or create alias (maybe)
+# TODO: export as 3d model (might be extension) (maybe)
 # TODO: add shadow to logo
 
 from __future__ import annotations
@@ -132,6 +131,8 @@ class Block:
 
     identifier: str
     states: dict[str, Any]
+
+    __slots__ = ("identifier", "states")
 
     def __init__(self, identifier: str, **states: Any):
         """
