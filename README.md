@@ -34,7 +34,7 @@ useful for the above named edition of Minecraft._
 
 > **Warning**
 > This project is currently in the **BETA** version. Some
-> features may not work as expected.
+> features may not work as expected and might change without backwards compability or deprecation warnings.
 
 <!-- start elevator-pitch -->
 
