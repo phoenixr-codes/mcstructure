@@ -52,7 +52,7 @@ Block in-game.
 Installation
 ------------
 
-```bash
+```console
 pip install mcstructure
 ```
 
