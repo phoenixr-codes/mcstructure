@@ -13,8 +13,8 @@
 🌍 This README is also available in the following
 languages:
 
-* [🇨🇳 Chinese](./README_CN.md)
-* [🇩🇪 German](./README_DE.md)
+* [🇨🇳 Chinese](./README_CN.md) *(not fully up-to-date)*
+* [🇩🇪 German](./README_DE.md) *(not fully up-to-date)*
 
 <!-- Not really accessible ♿️ but we get a better line
 than the default "<hr/>" or "---" --> 
