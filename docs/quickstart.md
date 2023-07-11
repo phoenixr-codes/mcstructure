@@ -51,7 +51,7 @@ with a {py:class}`mcstructure.Block` in a list.
 import numpy as np
 
 np.rot90(struct.structure)
-struct.structure 
+struct.structure = np.transpose(struct.structure)
 ```
 
 
