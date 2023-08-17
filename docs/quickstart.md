@@ -23,12 +23,21 @@ struct = Structure(
 ```
 
 
-## Viewing a Structure
+## Inspecting a Structure
 
 ```python
 struct.size  # The size of the structure
 struct.get_block(1, 1, 1)  # Get the block at (1, 1, 1)
 struct.get_structure()  # Get the numpy array representing the structure
+```
+
+
+## Viewing a Structure
+
+You can simply print the structure object:
+
+```python
+print(struct)
 ```
 
 
