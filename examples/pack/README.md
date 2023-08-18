@@ -15,7 +15,7 @@ pack
 
 ## Usage
 
-Update new structures with the following two commands.
+Update new structures with the following three commands.
 
 ```bash
 rm -rf src/structures/*.mcstructure  # Remove old structures
