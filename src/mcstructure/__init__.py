@@ -17,7 +17,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import partial
 from itertools import repeat
-import json
 from typing import Any, BinaryIO, Tuple
 
 import numpy as np
@@ -26,6 +25,7 @@ from pynbt import BaseTag, NBTFile, TAG_Compound, TAG_Int, TAG_List, TAG_String 
 
 
 Coordinate = Tuple[int, int, int]
+BlockStateValue = str | bool | int
 
 
 COMPABILITY_VERSION: int = 17959425
@@ -135,11 +135,11 @@ class Block:
     """
 
     identifier: str
-    states: dict[str, Any]
+    states: dict[str, BlockStateValue]
 
     __slots__ = ("identifier", "states")
 
-    def __init__(self, identifier: str, **states: Any):
+    def __init__(self, identifier: str, **states: BlockStateValue):
         """
         Parameters
         ----------
@@ -179,7 +179,18 @@ class Block:
             result += ns + ":"
         result += self.name
         if with_states:
-            result += f" [{json.dumps(self.states)[1:-1]}]"
+            result += " ["
+            for key, value in self.states.items():
+                result += f'"{key}"='
+                if isinstance(value, str):
+                    result += f'"{value}"'
+                elif isinstance(value, bool):
+                    result += str(value).lower()
+                elif isinstance(value, int):
+                    result += str(value)
+                else:
+                    raise ValueError("block state value must be str, bool or int")
+            result += "]"
         return result
 
     @property
