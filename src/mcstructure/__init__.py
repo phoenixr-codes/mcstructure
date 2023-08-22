@@ -36,7 +36,10 @@ integer determine the game version number. For example, ``17879555`` is
 """
 
 STRUCTURE_MAX_SIZE: tuple[int, int, int] = (64, 384, 64)
-"""The maximum size a structure can have."""
+"""
+The maximum size a structure can have. This does not apply for
+structures created externally.
+"""
 
 
 # TODO: cover all tags
@@ -101,8 +104,10 @@ def is_valid_structure_name(name: str, *, with_prefix: bool = False) -> bool:
     return all((char.isalnum() and char in "-_") for char in name)
 
 
-def has_valid_size(size: tuple[int, int, int]) -> bool:
-    """Returns ``False`` if ``size`` is too big.
+def has_suitable_size(size: tuple[int, int, int]) -> bool:
+    """
+    Returns ``False`` if ``size`` is greater than the size of
+    structures that can be created within Minecraft.
 
     .. seealso:: :const:`STRUCTURE_MAX_SIZE`
     """
@@ -275,9 +280,6 @@ class Structure:
 
             ``'minecraft:air'`` is used as default.
         """
-        if not has_valid_size(size):
-            raise ValueError(f"structure too large, max size: {STRUCTURE_MAX_SIZE}")
-
         self.structure: NDArray[np.intc]
 
         self._size = size

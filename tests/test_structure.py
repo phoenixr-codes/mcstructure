@@ -1,8 +1,6 @@
-from mcstructure import Structure, STRUCTURE_MAX_SIZE
-import pytest
+from mcstructure import has_suitable_size, STRUCTURE_MAX_SIZE
 
 
 def test_oversized() -> None:
-    Structure(STRUCTURE_MAX_SIZE)
-    with pytest.raises(ValueError):
-        Structure((65, 0, 0))
+    assert has_suitable_size(STRUCTURE_MAX_SIZE)
+    assert not has_suitable_size((65, 0, 0))
