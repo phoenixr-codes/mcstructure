@@ -16,7 +16,8 @@ languages:
 * [🇨🇳 Chinese](./README_CN.md)
 * [🇩🇪 German](./README_DE.md) *(not fully up-to-date)*
 
-<!-- Not really accessible ♿️ but we get a better line
+
+<!-- Not really accessible ♿️ but we get a prettier line
 than the default "<hr/>" or "---" --> 
 <h2></h2>
 
@@ -87,14 +88,18 @@ with open("house.mcstructure", "rb") as f:
 ```
 
 
-Useful Links
-------------
+References
+----------
 
-* [👋 Introduction to Structure Blocks](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
-* [📖 Bedrock Wiki](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
 * [📖 Documentation](https://mcstructure.readthedocs.io/en/latest/)
 * [📁 Source Code](https://github.com/phoenixr-codes/mcstructure)
 * [🐍 PyPI](https://pypi.org/project/mcstructure/)
+
+### External Resources
+
+* [👋 Introduction to Structure Blocks](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* [📖 Bedrock Wiki](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
+
 
 --------------------------------------------
 
