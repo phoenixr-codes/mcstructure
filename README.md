@@ -33,7 +33,7 @@ that is also known as the "Bedrock Edition"._
 _Features that this library provide are only
 useful for the above named edition of Minecraft._
 
-> **Warning**
+> [!WARNING]
 > This project is currently in the **BETA** version. Some
 > features may not work as expected and might change without backwards compability or deprecation warnings.
 
