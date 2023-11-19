@@ -10,37 +10,40 @@
 	</p>
 </p>
 
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-此介绍文件亦可见翻译：
+🌍 此介绍文件亦可见于以下语种：
 
-* [🇪🇳 英文](./README.md)
-* [🇩🇪 德文](./README_DE.md)
+* [🇬🇧 英文](./README.md)
+* [🇩🇪 德文](./README_DE.md) *(未及时更新)*
 
-*在整个项目中（且更官方地是在“大一统更新”("Better Together Update")之后）专有名词《我的世界》("Minecraft")所指代的均为基岩版("Bedrock Edition")。*
+<h2></h2>
 
-_此项目中的所有特性也是仅仅针对基岩版的。_
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
+[![Documentation Status](https://readthedocs.org/projects/mcstructure/badge/?style=for-the-badge&version=latest)](https://mcstructure.readthedocs.io/en/latest/?badge=latest)
+[![PyPI](https://img.shields.io/pypi/v/mcstructure?style=for-the-badge)](https://pypi.org/project/mcstructure)
+
+_在整个项目中（且更官方地是在“大一统更新”("Better Together Update")之后，名词《我的世界》("Minecraft")所指代的均为基岩版("Bedrock Edition")。_
+
+_此库中的所有特性也是仅仅针对基岩版的。_
 
 > **请注意**
-> 此项目目前仍属于 BETA版本，因此很多的特性可能无法实现。
+> 此项目目前仍属于 BETA版本，因此部分特性可能并未启用或在未经提示的情况下频繁更改。
 
 此库可以让您以代码实现对 *《我的世界》* 结构文件的创建与编辑。
-您能够凭此而将您自己的结构存储为 `.mcstructure` 文件，因而可以使之用于行为包中，或者发展出更牛逼的用途。
+您能够凭此而将您自己的结构存储为 `.mcstructure` 文件，因而可以使之用于行为包中，或者发展出更厉害的用途。
 
-当然，通过此库您也可以通过此库来读取(read)这些结构文件。
-以获取(identify)其中存储之方块与实体之类。
+当然，通过此库您也可以通过此库来读取(read)这些在游戏中通过*结构方块*保存的结构文件，从而获取(identify)其中存储之方块与实体之类。
 
-*译注：虽然上面看似废话，但实际上也是一个介绍好吧……QwQ*
 
 下载安装
 ------------
 
-```bash
+```console
 pip install mcstructure
 ```
 
 
-基础用法
+基本用法
 -----------
 
 1.	写入结构文件

@@ -13,7 +13,7 @@
 🌍 This README is also available in the following
 languages:
 
-* [🇨🇳 Chinese](./README_CN.md) *(not fully up-to-date)*
+* [🇨🇳 Chinese](./README_CN.md)
 * [🇩🇪 German](./README_DE.md) *(not fully up-to-date)*
 
 <!-- Not really accessible ♿️ but we get a better line
