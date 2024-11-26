@@ -38,7 +38,8 @@ integer determine the game version number. For example, ``17879555`` is
 STRUCTURE_MAX_SIZE: tuple[int, int, int] = (64, 384, 64)
 """
 The maximum size a structure can have. This does not apply for
-structures created externally.
+structures created externally and thus is not affect structures
+created with this library.
 """
 
 
@@ -129,7 +130,7 @@ class Block:
     --------
     .. code-block::
 
-        Block("minecraft:wool", color="red")
+        Block("minecraft:beehive", honey_level=4)
         Block("minecraft:grass")
 
     """

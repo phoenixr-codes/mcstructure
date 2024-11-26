@@ -29,6 +29,9 @@ keywords = [
 ]
 
 [project.optional-dependencies]
+dev = [
+  "pytest>=8"
+]
 docs = [
     "furo",
     "myst-parser>=2",
