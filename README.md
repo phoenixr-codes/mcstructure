@@ -25,8 +25,8 @@ than the default "<hr/>" or "---" -->
 [![Documentation Status](https://readthedocs.org/projects/mcstructure/badge/?style=for-the-badge&version=latest)](https://mcstructure.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/mcstructure?style=for-the-badge)](https://pypi.org/project/mcstructure)
 
-_In the entire project (and officially since 
-the "Better Together Update") the term
+_In the entire project ([and officially since 
+the "Better Together Update"](https://www.minecraft.net/de-de/article/all-news-e3)) the term
 "Minecraft" refers to the edition of Minecraft
 that is also known as the "Bedrock Edition"._
 
