@@ -30,7 +30,7 @@ the "Better Together Update") the term
 "Minecraft" refers to the edition of Minecraft
 that is also known as the "Bedrock Edition"._
 
-_Features that this library provide are only
+_Features that this library provides are only
 useful for the above named edition of Minecraft._
 
 > [!WARNING]
