@@ -326,7 +326,7 @@ class Structure:
         nbt = NBTFile(file, little_endian=True)
         size: tuple[int, int, int] = tuple(x.value for x in nbt["size"])  # type: ignore
 
-        struct = cls(size)
+        struct = cls(size, None)
 
         struct.structure = np.array(
             [_into_pyobj(x) for x in nbt["structure"]["block_indices"][0]],
