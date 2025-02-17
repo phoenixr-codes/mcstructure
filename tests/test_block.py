@@ -9,7 +9,12 @@ def test_stringify():
     assert b.stringify(with_namespace=False, with_states=False) == "wool"
 
     b = Block("minecraft:dispenser", triggered_bit=True)
-    assert b.stringify(with_namespace=False, with_states=True) == 'dispenser ["triggered_bit"=true]'
+    assert (
+        b.stringify(with_namespace=False, with_states=True)
+        == 'dispenser ["triggered_bit"=true]'
+    )
 
     b = Block("minecraft:jigsaw", rotation=12)
-    assert b.stringify(with_namespace=False, with_states=True) == 'jigsaw ["rotation"=12]'
+    assert (
+        b.stringify(with_namespace=False, with_states=True) == 'jigsaw ["rotation"=12]'
+    )
