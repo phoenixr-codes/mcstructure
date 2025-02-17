@@ -6,7 +6,7 @@
 	/>
 	<h1 align="center">mcstructure</h1>
 	<p align="center">
-		对于《我的世界》<code>.mcstructure</code> 文件的读写操作库
+		《我的世界》<code>.mcstructure</code> 文件的读写操作库
 	</p>
 </p>
 
@@ -16,6 +16,8 @@
 * [🇬🇧 英文](./README.md)
 * [🇩🇪 德文](./README_DE.md) *(未及时更新)*
 
+<!-- Not really accessible ♿️ but we get a prettier line
+than the default "<hr/>" or "---" --> 
 <h2></h2>
 
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
@@ -26,14 +28,18 @@ _在整个项目中（且更官方地是在“大一统更新”("Better Togethe
 
 _此库中的所有特性也是仅仅针对基岩版的。_
 
+> [!WARNING]
 > **请注意**
-> 此项目目前仍属于 BETA版本，因此部分特性可能并未启用或在未经提示的情况下频繁更改。
+> 此项目目前仍属于 **BETA** 版本，因此部分特性可能并未启用或在未经示警的情况下频繁更改。
+
+<!-- start elevator-pitch -->
 
 此库可以让您以代码实现对 *《我的世界》* 结构文件的创建与编辑。
 您能够凭此而将您自己的结构存储为 `.mcstructure` 文件，因而可以使之用于行为包中，或者发展出更厉害的用途。
 
 当然，通过此库您也可以通过此库来读取(read)这些在游戏中通过*结构方块*保存的结构文件，从而获取(identify)其中存储之方块与实体之类。
 
+<!-- end elevator-pitch -->
 
 下载安装
 ------------
@@ -85,13 +91,15 @@ pip install mcstructure
 妙用链接
 ------------
 
-* [👋 结构方块的简介](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
-* [📖 基岩版维基](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
-_译注：文件结构文档已经被我翻译了，详见[我的译本](https://gitee.com/TriM-Organization/mcstructure/blob/main/docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md)_
-* [📖 此项目之文档](https://mcstructure.readthedocs.io/en/latest/)
-* [📁 此项目之源码](https://github.com/phoenixr-codes/mcstructure)
-* [🐍 PyPI](https://pypi.org/project/mcstructure/)
+* 📖 [此项目之文档](https://mcstructure.readthedocs.io/en/latest/)
+* 📁 [此项目之源码](https://github.com/phoenixr-codes/mcstructure)
+* 🐍 [PyPI](https://pypi.org/project/mcstructure/)
 
+### 其他资源
+
+* 👋 [结构方块的简介](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* 📖 [基岩版维基](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
+_译注：文件结构文档已经被我翻译了，详见[我的译本](https://gitee.com/TriM-Organization/mcstructure/blob/main/docs/mcstructure%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.md)_
 --------------------------------------------
 
 NOT AN OFFICIAL MINECRAFT PRODUCT.
