@@ -270,6 +270,15 @@ class Structure:
     structure
         The numpy array representing the blocks in the structure. Each entry is an ID
         associated with a block present in :meth:`palette`.
+
+    _size
+        Size of the structure stored internally.
+
+    _palette
+        Internal list of blocks that are used within the structure. The position of
+        the block in the list represents its ID. Modification of this list should be
+        done with caution and if you do so consider modifying :attr:`structure`
+        appropriately. Instead use methods like :meth:`set_block`.
     """
 
     def __init__(
