@@ -32,6 +32,7 @@ keywords = [
 dev = [
   "pytest>=8",
   "mypy==1.16.1",
+  "black==25.1.0",
 ]
 docs = [
     "furo",
