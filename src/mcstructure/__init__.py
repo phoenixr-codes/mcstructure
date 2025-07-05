@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import partial
 from itertools import repeat
-from typing import Any, BinaryIO, Tuple
+from typing import Any, BinaryIO, Tuple, Self
 
 import numpy as np
 from numpy.typing import NDArray
@@ -516,7 +516,7 @@ class Structure:
         self,
         coordinate: Coordinate,
         block: Block | None,
-    ) -> Structure:
+    ) -> Self:
         """
         Places a block in the structure.
 
@@ -541,7 +541,7 @@ class Structure:
         from_coordinate: Coordinate,
         to_coordinate: Coordinate,
         block: Block,
-    ) -> Structure:
+    ) -> Self:
         """
         Fills an area in the structure with blocks.
 
@@ -577,7 +577,7 @@ class Structure:
         ).reshape([abs(i) + 1 for i in (fx - tx, fy - ty, fz - tz)])
         return self
 
-    def resize(self, size: Coordinate, fill: Block | None = None) -> Structure:
+    def resize(self, size: Coordinate, fill: Block | None = None) -> Self:
         """
         Resizes the structure.
 
