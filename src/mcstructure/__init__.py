@@ -559,7 +559,7 @@ class Structure:
 
         block
             The block to place. If this is set to ``None``
-            "STructure Void" blocks will be used to fill.
+            "Structure Void" blocks will be used to fill.
         """
         fx, fy, fz = from_coordinate
         tx, ty, tz = to_coordinate
@@ -575,4 +575,24 @@ class Structure:
             ],
             dtype=np.intc,
         ).reshape([abs(i) + 1 for i in (fx - tx, fy - ty, fz - tz)])
+        return self
+
+    def resize(self, size: Coordinate, fill: Block | None = None) -> Structure:
+        """
+        Resizes the structure.
+
+        This function erases blocks that are out of bounds and fill newly
+        created space with ``fill``.
+
+        Parameters
+        ----------
+        size
+            The new size of the structure.
+
+        fill
+            The block to fill newly created space with. If this is set to
+            ``None`` (default) then "Structure Void" blocks will be used.
+        """
+        ident = self._add_block_to_palette(fill)
+        self.structure = np.resize(ident, size)
         return self
