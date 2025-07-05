@@ -30,7 +30,8 @@ keywords = [
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8"
+  "pytest>=8",
+  "mypy==1.16.1",
 ]
 docs = [
     "furo",
