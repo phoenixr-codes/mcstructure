@@ -10,13 +10,17 @@
   </p>
 </p>
 
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
-Diese README-Datei ist auch in den folgenden
+🌍 Diese README-Datei ist auch in den folgenden
 Sprachen verfügbar:
 
 * [🇨🇳 Chinesisch](./README_CN.md)
 * [🇬🇧 Englisch](./README.md)
+
+<h2></h2>
+
+[![Code-Stil](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge)](https://github.com/psf/black)
+[![Dokumentationsstatus](https://readthedocs.org/projects/mcstructure/badge/?style=for-the-badge&version=latest)](https://mcstructure.readthedocs.io/en/latest/?badge=latest)
+[![PyPI](https://img.shields.io/pypi/v/mcstructure?style=for-the-badge)](https://pypi.org/project/mcstructure)
 
 _Im gesamten Projekt (und offiziell seit dem
 "Better Together Update") ist mit "Minecraft"
@@ -26,7 +30,7 @@ Edition" bekannt ist._
 _Features dieser Bibliothek sind nur in der
 oben genannten Edition von Minecraft nützlich._
 
-> **Warning**
+> [!WARNING]
 > Dieses Projekt ist momentan in der BETA Version.
 > Die meisten Features sind somit instabil.
 
@@ -44,7 +48,7 @@ innerhalb des Spiels gespeichert wurden.
 Installation
 ------------
 
-```bash
+```console
 pip install mcstructure
 ```
 
@@ -82,11 +86,15 @@ with open("house.mcstructure", "rb") as f:
 Nützliche Links
 ---------------
 
-* [👋 Einführung zu Konstruktionsblöcken](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
-* [📖 Bedrock Wiki](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
 * [📖 Dokumentation](https://mcstructure.readthedocs.io/en/latest/)
 * [📁 Quellcode](https://github.com/phoenixr-codes/mcstructure)
 * [🐍 PyPI](https://pypi.org/project/mcstructure/)
+
+### Externe Resourcen
+
+* [👋 Einführung zu Konstruktionsblöcken](https://learn.microsoft.com/en-us/minecraft/creator/documents/introductiontostructureblocks)
+* [📖 Bedrock Wiki](https://wiki.bedrock.dev/nbt/mcstructure.html#file-format)
+
 
 --------------------------------------------
 

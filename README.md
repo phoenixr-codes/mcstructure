@@ -14,7 +14,7 @@
 languages:
 
 * 🇨🇳 [Chinese](./README_CN.md)
-* 🇩🇪 [German](./README_DE.md) *(not fully up-to-date)*
+* 🇩🇪 [German](./README_DE.md)
 
 
 <!-- Not really accessible ♿️ but we get a prettier line
