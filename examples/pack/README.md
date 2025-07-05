@@ -18,6 +18,7 @@ pack
 Update new structures with the following three commands.
 
 ```bash
+mkdir -p build # Create output directory if not present yet
 rm -rf src/structures/*.mcstructure  # Remove old structures
 cp ../structures/*.mcstructure src/structures  # Add new structures
 ./makepack.py  # Build the pack
