@@ -577,12 +577,12 @@ class Structure:
         ).reshape([abs(i) + 1 for i in (fx - tx, fy - ty, fz - tz)])
         return self
 
-    def resize(self, size: Coordinate, fill: Block | None = None) -> Self:
+    def resize(self, size: tuple[int, int, int], fill: Block | None = Block("minecraft:air")) -> Self:
         """
         Resizes the structure.
 
         This function erases blocks that are out of bounds and fill newly
-        created space with ``fill``.
+        created space with ``fill`` (default is air).
 
         Parameters
         ----------
