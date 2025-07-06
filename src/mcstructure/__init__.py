@@ -595,4 +595,5 @@ class Structure:
         """
         ident = self._add_block_to_palette(fill)
         self.structure = np.resize(ident, size)
+        # TODO: update palette
         return self
