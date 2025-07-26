@@ -159,7 +159,9 @@ class Block:
         with_namespace: bool = True,
         with_states: bool = True,
     ) -> str:
-        """Returns a human-readable representation of the structure.
+        """Returns a human-readable representation of the block.
+
+        This format matches the one used for commands like `setblock`.
 
         Parameters
         ----------
