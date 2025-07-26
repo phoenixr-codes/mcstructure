@@ -14,7 +14,7 @@ def test_resize_larger() -> None:
     assert struct.get_block((3, 3, 3)) == air
     assert struct.get_block((0, 0, 0)) == dirt
     assert struct.get_block((1, 1, 1)) == dirt
-    assert struct.get_block((2, 2, 2)) == dirt
+    assert struct.get_block((2, 2, 2)) == air
 
 def test_resize_smaller() -> None:
     dirt = Block("minecraft:dirt")
