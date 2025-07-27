@@ -596,6 +596,33 @@ class Structure:
             ``None`` (default) then "Structure Void" blocks will be used.
         """
         ident = self._add_block_to_palette(fill)
-        self.structure = np.resize(ident, size)
-        # TODO: update palette
+        self._size = size
+
+        if self.structure.shape == size:
+            # No need to resize
+            return self
+
+        # Create new structure filled with the fill block identifier
+        if fill is not None:
+            new_structure = np.full(size, ident, dtype=np.intc)
+        else:
+            new_structure = np.full(size, -1, dtype=np.intc)  # Fill Structure void
+        
+        # Calculate the overlap region (what we can copy from old to new)
+        old_size = self.structure.shape
+        copy_size = tuple(min(old_size[i], size[i]) for i in range(3))
+        
+        # Copy the existing Blocks that fits into the new size
+        if all(s > 0 for s in copy_size):
+            new_structure[
+                :copy_size[0],
+                :copy_size[1], 
+                :copy_size[2]
+            ] = self.structure[
+                :copy_size[0],
+                :copy_size[1],
+                :copy_size[2]
+            ]
+        
+        self.structure = new_structure
         return self
