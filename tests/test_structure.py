@@ -18,8 +18,7 @@ def test_resize_larger() -> None:
 
 def test_resize_smaller() -> None:
     dirt = Block("minecraft:dirt")
-    air = Block("minecraft:air")
-    struct = Structure((4, 4, 4), fill=air)
+    struct = Structure((4, 4, 4), fill=dirt)
     struct.resize((2, 2, 2))
     with pytest.raises(IndexError):
         assert struct.get_block((3, 3, 3)) is None
