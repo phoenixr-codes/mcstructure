@@ -34,17 +34,17 @@ def test_combine() -> None:
     dirt = Block("minecraft:dirt")
     air = Block("minecraft:air")
     void = Block("minecraft:structure_void")
-    struct_A = Structure((1, 2, 2), fill=air)
-    struct_B = Structure((1, 2, 2), fill=dirt)
-    struct_C = struct_A.combine(struct_B, (0, 1, 1))
+    struct_a = Structure((1, 2, 2), fill=air)
+    struct_b = Structure((1, 2, 2), fill=dirt)
+    struct_c = struct_a.combine(struct_b, (0, 1, 1))
 
     # Check the combined structure
-    assert struct_C.get_block((0, 0, 0)) == air
-    assert struct_C.get_block((0, 0, 1)) == air
-    assert struct_C.get_block((0, 0, 2)) == void
-    assert struct_C.get_block((0, 1, 0)) == air
-    assert struct_C.get_block((0, 1, 1)) == dirt
-    assert struct_C.get_block((0, 1, 2)) == dirt
-    assert struct_C.get_block((0, 2, 0)) == void
-    assert struct_C.get_block((0, 2, 1)) == dirt
-    assert struct_C.get_block((0, 2, 2)) == dirt
+    assert struct_c.get_block((0, 0, 0)) == air
+    assert struct_c.get_block((0, 0, 1)) == air
+    assert struct_c.get_block((0, 0, 2)) == void
+    assert struct_c.get_block((0, 1, 0)) == air
+    assert struct_c.get_block((0, 1, 1)) == dirt
+    assert struct_c.get_block((0, 1, 2)) == dirt
+    assert struct_c.get_block((0, 2, 0)) == void
+    assert struct_c.get_block((0, 2, 1)) == dirt
+    assert struct_c.get_block((0, 2, 2)) == dirt
