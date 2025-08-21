@@ -512,7 +512,11 @@ class Structure:
             The coordinte of the block.
         """
         x, y, z = coordinate
-        return self._palette[self.structure[x, y, z]]
+        return (
+            self._palette[self.structure[x, y, z]]
+            if self.structure[x, y, z] >= 0
+            else Block("minecraft:structure_void")
+        )
 
     def set_block(
         self,
@@ -579,7 +583,9 @@ class Structure:
         ).reshape([abs(i) + 1 for i in (fx - tx, fy - ty, fz - tz)])
         return self
 
-    def resize(self, size: tuple[int, int, int], fill: Block | None = Block("minecraft:air")) -> Self:
+    def resize(
+        self, size: tuple[int, int, int], fill: Block | None = Block("minecraft:air")
+    ) -> Self:
         """
         Resizes the structure.
 
@@ -607,22 +613,75 @@ class Structure:
             new_structure = np.full(size, ident, dtype=np.intc)
         else:
             new_structure = np.full(size, -1, dtype=np.intc)  # Fill Structure void
-        
+
         # Calculate the overlap region (what we can copy from old to new)
         old_size = self.structure.shape
         copy_size = tuple(min(old_size[i], size[i]) for i in range(3))
-        
+
         # Copy the existing Blocks that fits into the new size
         if all(s > 0 for s in copy_size):
-            new_structure[
-                :copy_size[0],
-                :copy_size[1], 
-                :copy_size[2]
-            ] = self.structure[
-                :copy_size[0],
-                :copy_size[1],
-                :copy_size[2]
-            ]
-        
+            new_structure[: copy_size[0], : copy_size[1], : copy_size[2]] = (
+                self.structure[: copy_size[0], : copy_size[1], : copy_size[2]]
+            )
+
         self.structure = new_structure
         return self
+
+    def combine(self, other: Structure, position: Coordinate = (0, 0, 0)) -> Structure:
+        """
+        Combines another structure into this structure.
+
+        Parameters
+        ----------
+        other
+            The other structure to combine with.
+
+        position
+            The position to place the other structure at.
+
+            note: This position is relative to the
+            current structure's origin. ( no negative coordinates allowed )
+
+        Returns
+        -------
+        Structure
+            The combined structure.
+        """
+
+        ox, oy, oz = position
+
+        if ox < 0 or oy < 0 or oz < 0:
+            raise ValueError("Negative coordinates are not allowed.")
+
+        # Calculate the new size needed to accommodate both structures
+        end_pos = (ox + other._size[0], oy + other._size[1], oz + other._size[2])
+        new_size = (max(self._size[0], end_pos[0]), max(self._size[1], end_pos[1]), max(self._size[2], end_pos[2]))
+
+        combined = Structure(new_size, None)
+
+        # Copy the current structure's palette
+        combined._palette = self._palette.copy()
+
+        # Copy the current structure
+        combined.structure[: self._size[0], : self._size[1], : self._size[2]] = (
+            self.structure
+        )
+
+        # Create mapping from other's palette indices to combined palette indices
+        other_to_combined_mapping = {
+            other_idx: combined._add_block_to_palette(block)
+            for other_idx, block in enumerate(other._palette)
+        }
+
+        # Remap the entire other structure using vectorized operations
+        remapped_structure = other.structure.copy()
+
+        # For non-structure-void blocks, apply the palette mapping
+        for other_idx, combined_idx in other_to_combined_mapping.items():
+            block_mask = other.structure == other_idx
+            remapped_structure[block_mask] = combined_idx
+
+        # Overlay the remapped structure onto the combined structure
+        combined.structure[ox:, oy:, oz:] = remapped_structure[:, :, :]
+
+        return combined
