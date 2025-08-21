@@ -655,7 +655,7 @@ class Structure:
 
         # Calculate the new size needed to accommodate both structures
         end_pos = (ox + other._size[0], oy + other._size[1], oz + other._size[2])
-        new_size = tuple(max(self._size[i], end_pos[i]) for i in range(3))
+        new_size = (max(self._size[0], end_pos[0]), max(self._size[0], end_pos[0]), max(self._size[0], end_pos[0]))
 
         combined = Structure(new_size, None)
 
