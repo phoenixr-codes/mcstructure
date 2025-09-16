@@ -11,11 +11,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import partial
 from itertools import repeat
-from typing import Any, BinaryIO, Tuple, Self
+from typing import Any, BinaryIO, Tuple, Self, cast
 
 import numpy as np
 from numpy.typing import NDArray
-from pynbt import BaseTag, NBTFile, TAG_Compound, TAG_Int, TAG_List, TAG_String  # type: ignore
+import nbtx
 
 
 Coordinate = Tuple[int, int, int]
@@ -35,47 +35,6 @@ The maximum size a structure can have. This does not apply for
 structures created externally and thus is not affect structures
 created with this library.
 """
-
-
-# TODO: cover all tags
-def _into_pyobj(tag: BaseTag) -> Any:
-    """
-    Turns an NBT tree into a python tree.
-    """
-    if isinstance(tag, (TAG_Compound, dict)):
-        res = {}
-        for key, value in tag.items():
-            if isinstance(value, BaseTag):
-                value = _into_pyobj(value)
-            res[key] = value
-        return res
-
-    if isinstance(tag, (TAG_List, list)):
-        res = []
-        for value in tag:
-            if isinstance(value, BaseTag):
-                value = _into_pyobj(value)
-            res.append(value)
-        return res
-
-    if isinstance(tag, BaseTag):
-        return tag.value
-
-    return tag
-
-
-# TODO: cover all types
-def _into_tag(obj: Any) -> BaseTag:
-    """
-    Turn a python tree into an NBT tree.
-    """
-    if isinstance(obj, int):
-        return TAG_Int(obj)
-
-    if isinstance(obj, str):
-        return TAG_String(obj)
-
-    return obj
 
 
 def is_valid_structure_name(name: str, *, with_prefix: bool = False) -> bool:
@@ -310,7 +269,7 @@ class Structure:
             self._palette.append(fill)
 
     @classmethod
-    def load(cls, file: BinaryIO):
+    def load(cls, file: BinaryIO) -> Self:
         """
         Loads a structure from a file.
 
@@ -328,20 +287,22 @@ class Structure:
         file
             File object to read.
         """
-        nbt = NBTFile(file, little_endian=True)
-        size: tuple[int, int, int] = tuple(x.value for x in nbt["size"])  # type: ignore
+        nbt_root = nbtx.load(file, endianness="little")
+        assert isinstance(nbt_root, nbtx.TagCompound)
+        nbt_body = nbt_root.as_python()[""]
+        size: tuple[int, int, int] = tuple(x.value for x in nbt_body.value.fil(lambda x: x.name == "size", n=1))
 
         struct = cls(size, None)
 
         struct.structure = np.array(
-            [_into_pyobj(x) for x in nbt["structure"]["block_indices"][0]],
+            [x for x in nbt_body["structure"]["block_indices"][0]],
             dtype=np.intc,
         ).reshape(size)
 
         struct._palette.extend(
             [
-                Block(block["name"].value, **_into_pyobj(block["states"].value))
-                for block in nbt["structure"]["palette"]["default"]["block_palette"]
+                Block(block["name"].value, **(block["states"]))
+                for block in nbt_body["structure"]["palette"]["default"]["block_palette"]
             ]
         )
 
@@ -385,7 +346,7 @@ class Structure:
                 Block.stringify, with_namespace=with_namespace, with_states=with_states
             )
         )
-        return vec(arr)
+        return cast(NDArray[Any], vec(arr))
 
     def _add_block_to_palette(self, block: Block | None) -> int:
         """
@@ -442,65 +403,99 @@ class Structure:
         file
             File object to write to.
         """
-        nbt = NBTFile(
-            value=dict(
-                format_version=TAG_Int(1),
-                size=TAG_List(TAG_Int, map(TAG_Int, self._size)),
-                structure=TAG_Compound(
-                    dict(
-                        block_indices=TAG_List(
-                            TAG_List,
-                            [
-                                TAG_List(
-                                    TAG_Int, map(TAG_Int, self.structure.flatten())
+        nbt = nbtx.TagCompound[Any, Any](
+            name="",
+            value=[
+                nbtx.TagInt(name="format_version", value=1),
+                nbtx.TagList(
+                    name="size",
+                    child_id=nbtx.TagInt.id(),
+                    value=[
+                        nbtx.TagInt("", self._size[0]),
+                        nbtx.TagInt("", self._size[1]),
+                        nbtx.TagInt("", self._size[2]),
+                    ],
+                ),
+                nbtx.TagCompound(
+                    name="structure",
+                    value=[
+                        nbtx.TagList(
+                            name="block_indices",
+                            child_id=nbtx.TagList.id(),
+                            value=[
+                                nbtx.TagList(
+                                    name="",
+                                    child_id=nbtx.TagInt.id(),
+                                    value=[nbtx.TagInt("", i.item()) for i in self.structure.flatten()],
                                 ),
-                                TAG_List(
-                                    TAG_Int,
-                                    map(TAG_Int, repeat(-1, self.structure.size)),
+                                nbtx.TagList(
+                                    name="",
+                                    child_id=nbtx.TagInt.id(),
+                                    value=list(repeat(nbtx.TagInt("", -1), self.structure.size)),
                                 ),
                             ],
                         ),
-                        entities=TAG_List(TAG_Compound, []),
-                        palette=TAG_Compound(
-                            dict(
-                                default=TAG_Compound(
-                                    dict(
-                                        block_palette=TAG_List(
-                                            TAG_Compound,
-                                            [
-                                                TAG_Compound(
-                                                    dict(
-                                                        name=TAG_String(
-                                                            block.identifier
+                        nbtx.TagList(
+                            name="entities",
+                            child_id=nbtx.TagCompound.id(),
+                            value=[],
+                        ),
+                        nbtx.TagCompound(
+                            name="palette",
+                            value=[
+                                nbtx.TagCompound(
+                                    name="default",
+                                    value=[
+                                        nbtx.TagList(
+                                            name="block_palette",
+                                            child_id=nbtx.TagList.id(),
+                                            value=[
+                                                nbtx.TagCompound(
+                                                    name="",
+                                                    value=[
+                                                        nbtx.TagString(
+                                                            name="name",
+                                                            value=block.identifier,
                                                         ),
-                                                        states=TAG_Compound(
-                                                            {
-                                                                state_name: _into_tag(
-                                                                    state_value
+                                                        nbtx.TagCompound(
+                                                            name="states",
+                                                            value=[
+                                                                (
+                                                                    nbtx.TagInt(state_name, state_value) if isinstance(state_value, int) else
+                                                                    nbtx.TagString(state_name, state_value) if isinstance(state_value, str) else
+                                                                    nbtx.TagByte(state_name, state_value) # TODO: confirm bools are stored as bytes
                                                                 )
                                                                 for state_name, state_value in block.states.items()
-                                                            }
+                                                            ]
                                                         ),
-                                                        version=TAG_Int(
-                                                            COMPABILITY_VERSION
+                                                        nbtx.TagInt(
+                                                            name="version",
+                                                            value=COMPABILITY_VERSION
                                                         ),
-                                                    )
+                                                    ]
                                                 )
                                                 for block in self._palette
                                             ],
                                         ),
-                                        block_position_data=TAG_Compound({}),
-                                    )
+                                        nbtx.TagCompound(name="block_position_data", value=[]),
+                                    ]
                                 )
-                            )
+                            ]
                         ),
-                    )
+                    ],
                 ),
-                structure_world_origin=TAG_List(TAG_Int, [0, 0, 0]),
-            ),
-            little_endian=True,
+                nbtx.TagList(
+                    name="structure_world_origin",
+                    value=[
+                        nbtx.TagInt(name="", value=0),
+                        nbtx.TagInt(name="", value=0),
+                        nbtx.TagInt(name="", value=0),
+                    ],
+                    child_id=nbtx.TagInt.id(),
+                ),
+            ],
         )
-        nbt.save(file, little_endian=True)
+        nbtx.dump(nbt, file, endianness="little")
 
     def get_block(self, coordinate: Coordinate) -> Block | None:
         """

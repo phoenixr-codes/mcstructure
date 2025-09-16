@@ -8,9 +8,9 @@ version = "0.0.1b6"
 description = "Read and write Minecraft .mcstructure files."
 dependencies = [
     "numpy==2.3.0",
-    "pynbt==2",
+    "nbtx==0.3.1",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "MIT"}
 classifiers = [
@@ -41,8 +41,9 @@ docs = [
     "sphinx-copybutton>=0",
 ]
 
+[tool.mypy]
+strict = true
+
 [project.urls]
 "Documentation" = "https://mcstructure.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/phoenixr-codes/mcstructure/"
-
-

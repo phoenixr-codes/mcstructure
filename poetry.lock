@@ -566,6 +566,22 @@ testing = ["beautifulsoup4", "coverage[toml]", "defusedxml", "pygments (<2.19)",
 testing-docutils = ["pygments", "pytest (>=8,<9)", "pytest-param-files (>=0.6.0,<0.7.0)"]
 
 [[package]]
+name = "nbtx"
+version = "0.3.0"
+description = "Minecraft NBT parser"
+optional = false
+python-versions = ">=3.13"
+groups = ["main"]
+files = [
+    {file = "nbtx-0.3.0-py3-none-any.whl", hash = "sha256:0171d7e581a5a58471eac56e4bec39108254bb191d55bae4fc622a76970c0c46"},
+    {file = "nbtx-0.3.0.tar.gz", hash = "sha256:22154e73125b1fd86dd8a2da17670a2d87c7c3c65d040de7476b71507ef3689c"},
+]
+
+[package.extras]
+dev = ["codespell (==2.4.1)", "coverage (==7.10.6)", "docstr-coverage (==2.3.2)", "isort (==6.0.1)", "mypy (==1.17.1)", "nox (==2025.5.1)", "pytest (==8.4.1)", "ruff (==0.12.12)"]
+docs = ["pdoc (==15.0.4)"]
+
+[[package]]
 name = "numpy"
 version = "2.3.0"
 description = "Fundamental package for array computing in Python"
@@ -702,21 +718,6 @@ files = [
 
 [package.extras]
 windows-terminal = ["colorama (>=0.4.6)"]
-
-[[package]]
-name = "pynbt"
-version = "2.0.0"
-description = "Tiny, liberally-licensed NBT library (Minecraft)."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "PyNBT-2.0.0-py3-none-any.whl", hash = "sha256:e46a7b92574482d23f608b7af3ade8df23d48fced952d86727676147c2e8e9f6"},
-    {file = "PyNBT-2.0.0.tar.gz", hash = "sha256:250128278421dedd497b3b4276ed5df6353562b221c03472796e5bf19d2a3077"},
-]
-
-[package.extras]
-test = ["pytest"]
 
 [[package]]
 name = "pytest"
@@ -1091,5 +1092,5 @@ docs = ["Sphinx", "furo", "myst-parser", "sphinx-copybutton"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.11"
-content-hash = "b761dc74c12d1b08d2abde57aa6a2b6cf7ee98cb0e61027ecd197ad540ad33e7"
+python-versions = ">=3.13"
+content-hash = "7bd114d1fce906ab16c76a65e9066b46cd2678a4e7bd5e86f57facd9888b898f"
