@@ -567,14 +567,14 @@ testing-docutils = ["pygments", "pytest (>=8,<9)", "pytest-param-files (>=0.6.0,
 
 [[package]]
 name = "nbtx"
-version = "0.3.0"
+version = "0.3.2"
 description = "Minecraft NBT parser"
 optional = false
 python-versions = ">=3.13"
 groups = ["main"]
 files = [
-    {file = "nbtx-0.3.0-py3-none-any.whl", hash = "sha256:0171d7e581a5a58471eac56e4bec39108254bb191d55bae4fc622a76970c0c46"},
-    {file = "nbtx-0.3.0.tar.gz", hash = "sha256:22154e73125b1fd86dd8a2da17670a2d87c7c3c65d040de7476b71507ef3689c"},
+    {file = "nbtx-0.3.2-py3-none-any.whl", hash = "sha256:118e7ee1598d83dbc14d44912c0546fec290f4101eb2224fdf8766024dc4796a"},
+    {file = "nbtx-0.3.2.tar.gz", hash = "sha256:b7934e673317d6f9751941b96a75424eb1ea29938b8da26a67a549a6715c541a"},
 ]
 
 [package.extras]
@@ -1093,4 +1093,4 @@ docs = ["Sphinx", "furo", "myst-parser", "sphinx-copybutton"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "7bd114d1fce906ab16c76a65e9066b46cd2678a4e7bd5e86f57facd9888b898f"
+content-hash = "6393f4d88b5ee273460ab50b8fb11482096892a3d14f6a600d8119dd6f665401"

@@ -1,4 +1,7 @@
 from mcstructure import Block, Structure
+from pathlib import Path
+
+here = Path(__file__).parent
 
 struct = Structure(
     (6, 6, 6),  # Size of the Structure     声明结构大小，注意这是大小，其坐标从0开始
@@ -13,5 +16,5 @@ print(struct.get_structure())
 print(struct._get_str_array(with_namespace=False, with_states=True))
 
 # write into file  写入文件
-with open("structures/my_create.mcstructure", "wb") as f:
+with here.joinpath("out/area.mcstructure").open("wb") as f:
     struct.dump(f)

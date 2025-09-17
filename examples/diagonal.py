@@ -1,5 +1,7 @@
 from mcstructure import Block, Structure
+from pathlib import Path
 
+here = Path(__file__).parent
 
 BLOCK = Block("minecraft:grass")
 
@@ -13,5 +15,5 @@ struct = Structure((10, 10, 10), BLOCK)
     .set_block((5, 5, 5), BLOCK)
 )
 
-with open("examples/my_diagonal.mcstructure", "wb") as f:
+with here.joinpath("out/diagonal.mcstructure").open("wb") as f:
     struct.dump(f)
