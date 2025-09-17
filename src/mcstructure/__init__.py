@@ -289,8 +289,8 @@ class Structure:
         """
         nbt_root = nbtx.load(file, endianness="little")
         assert isinstance(nbt_root, nbtx.TagCompound)
-        nbt_body = nbt_root.as_python()[""]
-        size: tuple[int, int, int] = tuple(x.value for x in nbt_body.value.fil(lambda x: x.name == "size", n=1))
+        nbt_body = nbt_root.as_python()
+        size: tuple[int, int, int] = tuple(nbt_body["size"])
 
         struct = cls(size, None)
 
@@ -301,7 +301,7 @@ class Structure:
 
         struct._palette.extend(
             [
-                Block(block["name"].value, **(block["states"]))
+                Block(block["name"], **(block["states"]))
                 for block in nbt_body["structure"]["palette"]["default"]["block_palette"]
             ]
         )
@@ -448,7 +448,7 @@ class Structure:
                                     value=[
                                         nbtx.TagList(
                                             name="block_palette",
-                                            child_id=nbtx.TagList.id(),
+                                            child_id=nbtx.TagCompound.id(),
                                             value=[
                                                 nbtx.TagCompound(
                                                     name="",
