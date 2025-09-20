@@ -1,7 +1,10 @@
 from mcstructure import Structure
+from pathlib import Path
 
-with open("examples/structures/large_nether.mcstructure", "rb") as f:
+here = Path(__file__).parent
+
+with here.joinpath("../samples/large_nether.mcstructure").open("rb") as f:
     struct = Structure.load(f)
 
-with open("examples/pack/src/structures/large_nether.mcstructure", "wb") as f:
+with here.joinpath("out/large_nether.mcstructure").open("wb") as f:
     struct.dump(f)

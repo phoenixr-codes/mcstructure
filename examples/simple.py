@@ -1,4 +1,7 @@
 from mcstructure import Block, Structure
+from pathlib import Path
+
+here = Path(__file__).parent
 
 struct = Structure(
     (2, 2, 2),  # Size of the Structure     声明结构大小，注意这是大小，其坐标从0开始
@@ -9,5 +12,5 @@ struct = Structure(
 struct.set_block((1, 1, 1), Block("minecraft:iron_block"))
 
 # write into file  写入文件
-with open("structures/my_simple.mcstructure", "wb") as f:
+with here.joinpath("out/simple.mcstructure").open("wb") as f:
     struct.dump(f)
