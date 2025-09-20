@@ -5,7 +5,7 @@ here = Path(__file__).parent
 
 BLOCK = Block("minecraft:grass")
 
-struct = Structure((10, 10, 10), BLOCK)
+struct = Structure((10, 10, 10), Block("minecraft:air"))
 (
     struct.set_block((0, 0, 0), BLOCK)
     .set_block((1, 1, 1), BLOCK)
