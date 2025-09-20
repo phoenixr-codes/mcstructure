@@ -302,7 +302,9 @@ class Structure:
         struct._palette.extend(
             [
                 Block(block["name"], **(block["states"]))
-                for block in nbt_body["structure"]["palette"]["default"]["block_palette"]
+                for block in nbt_body["structure"]["palette"]["default"][
+                    "block_palette"
+                ]
             ]
         )
 
@@ -426,12 +428,17 @@ class Structure:
                                 nbtx.TagList(
                                     name="",
                                     child_id=nbtx.TagInt.id(),
-                                    value=[nbtx.TagInt("", i.item()) for i in self.structure.flatten()],
+                                    value=[
+                                        nbtx.TagInt("", i.item())
+                                        for i in self.structure.flatten()
+                                    ],
                                 ),
                                 nbtx.TagList(
                                     name="",
                                     child_id=nbtx.TagInt.id(),
-                                    value=list(repeat(nbtx.TagInt("", -1), self.structure.size)),
+                                    value=list(
+                                        repeat(nbtx.TagInt("", -1), self.structure.size)
+                                    ),
                                 ),
                             ],
                         ),
@@ -461,26 +468,46 @@ class Structure:
                                                             name="states",
                                                             value=[
                                                                 (
-                                                                    nbtx.TagInt(state_name, state_value) if isinstance(state_value, int) else
-                                                                    nbtx.TagString(state_name, state_value) if isinstance(state_value, str) else
-                                                                    nbtx.TagByte(state_name, state_value) # TODO: confirm bools are stored as bytes
+                                                                    nbtx.TagInt(
+                                                                        state_name,
+                                                                        state_value,
+                                                                    )
+                                                                    if isinstance(
+                                                                        state_value, int
+                                                                    )
+                                                                    else (
+                                                                        nbtx.TagString(
+                                                                            state_name,
+                                                                            state_value,
+                                                                        )
+                                                                        if isinstance(
+                                                                            state_value,
+                                                                            str,
+                                                                        )
+                                                                        else nbtx.TagByte(
+                                                                            state_name,
+                                                                            state_value,
+                                                                        )
+                                                                    )  # TODO: confirm bools are stored as bytes
                                                                 )
                                                                 for state_name, state_value in block.states.items()
-                                                            ]
+                                                            ],
                                                         ),
                                                         nbtx.TagInt(
                                                             name="version",
-                                                            value=COMPABILITY_VERSION
+                                                            value=COMPABILITY_VERSION,
                                                         ),
-                                                    ]
+                                                    ],
                                                 )
                                                 for block in self._palette
                                             ],
                                         ),
-                                        nbtx.TagCompound(name="block_position_data", value=[]),
-                                    ]
+                                        nbtx.TagCompound(
+                                            name="block_position_data", value=[]
+                                        ),
+                                    ],
                                 )
-                            ]
+                            ],
                         ),
                     ],
                 ),
@@ -650,7 +677,11 @@ class Structure:
 
         # Calculate the new size needed to accommodate both structures
         end_pos = (ox + other._size[0], oy + other._size[1], oz + other._size[2])
-        new_size = (max(self._size[0], end_pos[0]), max(self._size[1], end_pos[1]), max(self._size[2], end_pos[2]))
+        new_size = (
+            max(self._size[0], end_pos[0]),
+            max(self._size[1], end_pos[1]),
+            max(self._size[2], end_pos[2]),
+        )
 
         combined = Structure(new_size, None)
 

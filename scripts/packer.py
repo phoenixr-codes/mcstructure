@@ -14,6 +14,7 @@ root = here.parent
 logo = root / "logo.png"
 structures = root / "examples/out"
 
+
 def main() -> None:
     timestamp = datetime.now().strftime("%d.%m %H:%M")
     name = f"mcstructure pack - {timestamp}"
@@ -26,16 +27,8 @@ def main() -> None:
             "version": [1, 0, 0],
             "min_engine_version": [1, 21, 0],
         },
-        "modules": [
-            {
-                "type": "data",
-                "uuid": str(uuid4()),
-                "version": [1, 0, 0]
-            }
-        ],
-        "metadata": {
-            "product_type": "addon"
-        }
+        "modules": [{"type": "data", "uuid": str(uuid4()), "version": [1, 0, 0]}],
+        "metadata": {"product_type": "addon"},
     }
     with TemporaryDirectory() as temp_dir_str:
         temp_dir = Path(temp_dir_str)
@@ -49,10 +42,13 @@ def main() -> None:
             destination = structures_dir / structure_path.name
             destination.write_bytes(structure_path.read_bytes())
             print(f"adding {structure_path}")
-        with zipfile.ZipFile((root / name.replace(".", "_")).with_suffix(".mcpack"), "w") as archive:
+        with zipfile.ZipFile(
+            (root / name.replace(".", "_")).with_suffix(".mcpack"), "w"
+        ) as archive:
             for source_path in temp_dir.glob("**/*"):
                 print(f"archiving {source_path}")
                 archive.write(source_path, arcname=source_path.relative_to(temp_dir))
+
 
 if __name__ == "__main__":
     main()
