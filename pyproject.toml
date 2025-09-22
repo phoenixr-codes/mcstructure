@@ -8,7 +8,7 @@ version = "0.0.1b6"
 description = "Read and write Minecraft .mcstructure files."
 dependencies = [
     "numpy==2.3.0",
-    "nbtx==0.3.2",
+    "nbtx==0.4.0",
 ]
 requires-python = ">=3.13"
 readme = "README.md"

@@ -4,10 +4,10 @@ Read and write Minecraft ``.mcstructure`` files.
 
 # TODO: support second layer (waterlogged blocks)
 # TODO: support additional block data
-# TODO: support entities
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import partial
 from itertools import repeat
@@ -226,6 +226,9 @@ class Structure:
         The numpy array representing the blocks in the structure. Each entry is an ID
         associated with a block present in :meth:`palette`.
 
+    entities
+        A list of entities the structure contains.
+
     _size
         Size of the structure stored internally.
 
@@ -257,6 +260,7 @@ class Structure:
             ``'minecraft:air'`` is used as default.
         """
         self.structure: NDArray[np.intc]
+        self.entities: list[nbtx.Tag[Any, Any]] = []
 
         self._size = size
         self._palette: list[Block] = []
@@ -298,6 +302,8 @@ class Structure:
             [x for x in nbt_body["structure"]["block_indices"][0]],
             dtype=np.intc,
         ).reshape(size)
+
+        struct.entities = nbt_root["entities"].value
 
         struct._palette.extend(
             [
@@ -386,9 +392,9 @@ class Structure:
             arr[self.structure == key] = block
         return arr
 
-    def dump(self, file: BinaryIO) -> None:
+    def as_nbt(self) -> nbtx.TagCompound[Any, Any]:
         """
-        Serialize the structure as a NBT file.
+        Serialize the structure as a NBT data.
 
         Examples
         --------
@@ -397,15 +403,10 @@ class Structure:
             from mcstructure import Structure
 
             struct = Structure((5, 5, 5), None)
-            with open("house.mcstructure", "wb") as f:
-                struct.dump(f)
-
-        Parameters
-        ----------
-        file
-            File object to write to.
+            nbt = struct.as_nbt()
+            print(nbt.pretty())
         """
-        nbt = nbtx.TagCompound[Any, Any](
+        return nbtx.TagCompound[Any, Any](
             name="",
             value=[
                 nbtx.TagInt(name="format_version", value=1),
@@ -522,6 +523,27 @@ class Structure:
                 ),
             ],
         )
+
+    def dump(self, file: BinaryIO) -> None:
+        """
+        Serialize the structure as a NBT file.
+
+        Examples
+        --------
+        .. code-block:: python
+
+            from mcstructure import Structure
+
+            struct = Structure((5, 5, 5), None)
+            with open("house.mcstructure", "wb") as f:
+                struct.dump(f)
+
+        Parameters
+        ----------
+        file
+            File object to write to.
+        """
+        nbt = self.as_nbt()
         nbtx.dump(nbt, file, endianness="little")
 
     def get_block(self, coordinate: Coordinate) -> Block | None:
@@ -539,6 +561,20 @@ class Structure:
             if self.structure[x, y, z] >= 0
             else Block("minecraft:structure_void")
         )
+
+    def add_entity(self, nbt_data: nbtx.Tag[Any, Any]) -> Self:
+        """
+        Adds an entity to the structure.
+
+        Parameters
+        ----------
+        nbt_data
+            The NBT data of the entity to add.
+            The best approach would be to export a structure from the game,
+            display the NBT data and use that as a reference.
+        """
+        self.entities.append(nbt_data)
+        return self
 
     def set_block(
         self,
