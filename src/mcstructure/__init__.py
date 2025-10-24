@@ -446,7 +446,7 @@ class Structure:
                         nbtx.TagList(
                             name="entities",
                             child_id=nbtx.TagCompound.id(),
-                            value=[],
+                            value=self.entities,
                         ),
                         nbtx.TagCompound(
                             name="palette",
