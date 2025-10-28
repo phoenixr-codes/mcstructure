@@ -2,13 +2,12 @@
 Read and write Minecraft ``.mcstructure`` files.
 """
 
-# TODO: support second layer (waterlogged blocks)
 # TODO: support additional block data
 
 from __future__ import annotations
 
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import partial
 from itertools import repeat
 from typing import Any, BinaryIO, Tuple, Self, cast
@@ -68,7 +67,7 @@ def has_suitable_size(size: tuple[int, int, int]) -> bool:
     return all(map(lambda n: n[0] <= n[1], zip(size, STRUCTURE_MAX_SIZE)))
 
 
-@dataclass(init=False)
+@dataclass(init=False, slots=True)
 class Block:
     """
     Attributes
@@ -90,10 +89,9 @@ class Block:
 
     identifier: str
     states: dict[str, BlockStateValue]
+    waterlogged: bool = field(kw_only=True, default=False)
 
-    __slots__ = ("identifier", "states")
-
-    def __init__(self, identifier: str, **states: BlockStateValue):
+    def __init__(self, identifier: str, *, waterlogged: bool = False, **states: BlockStateValue):
         """
         Parameters
         ----------
@@ -105,9 +103,13 @@ class Block:
             This varies by every block.
 
             .. seealso:: https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockstateslist
+
+        waterlogged
+            Whether this block is waterlogged.
         """
         self.identifier = identifier
         self.states = states
+        self.waterlogged = waterlogged
 
     def __str__(self) -> str:
         return self.stringify()
@@ -216,6 +218,7 @@ class Block:
         """
         return self.namespace_and_name[0]
 
+_WATER = Block("minecraft:water", liquid_depth=0)
 
 class Structure:
     """Class representing a Minecraft structure that consists of blocks and entities.
@@ -303,14 +306,16 @@ class Structure:
             dtype=np.intc,
         ).reshape(size)
 
-        struct.entities = nbt_root["entities"].value
+        struct.entities = nbt_body["structure"]["entities"]
+
+        waterlogged_mask: list[bool] = [value != -1 for value in nbt_body["structure"]["block_indices"][1]]
 
         struct._palette.extend(
             [
-                Block(block["name"], **(block["states"]))
-                for block in nbt_body["structure"]["palette"]["default"][
+                Block(block["name"], **(block["states"]), waterlogged=waterlogged_mask[index])
+                for (index, block) in enumerate(nbt_body["structure"]["palette"]["default"][
                     "block_palette"
-                ]
+                ])
             ]
         )
 
@@ -380,6 +385,18 @@ class Structure:
         self._palette.append(block)
         return len(self._palette) - 1
 
+    def _water_index(self) -> int:
+        """
+        Returns the index of water with liquid depth 0.
+
+        If water is not present in the palette, then water will be added to the
+        palette.
+        """
+        for (index, block) in enumerate(self._palette):
+            if block == _WATER:
+                return index
+        return self._add_block_to_palette(_WATER)
+
     def get_structure(self) -> NDArray[Any]:
         """
         Returns the structure as a numpy array filled
@@ -437,9 +454,13 @@ class Structure:
                                 nbtx.TagList(
                                     name="",
                                     child_id=nbtx.TagInt.id(),
-                                    value=list(
-                                        repeat(nbtx.TagInt("", -1), self.structure.size)
-                                    ),
+                                    value=[
+                                        nbtx.TagInt(
+                                            "",
+                                            self._water_index() if self._palette[i.item()].waterlogged else -1
+                                        )
+                                        for i in self.structure.flatten()
+                                    ],
                                 ),
                             ],
                         ),
@@ -489,7 +510,7 @@ class Structure:
                                                                             state_name,
                                                                             state_value,
                                                                         )
-                                                                    )  # TODO: confirm bools are stored as bytes
+                                                                    )
                                                                 )
                                                                 for state_name, state_value in block.states.items()
                                                             ],

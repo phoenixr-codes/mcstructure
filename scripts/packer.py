@@ -42,12 +42,12 @@ def main() -> None:
             destination = structures_dir / structure_path.name
             destination.write_bytes(structure_path.read_bytes())
             print(f"adding {structure_path}")
-        with zipfile.ZipFile(
-            (root / name.replace(".", "_")).with_suffix(".mcpack"), "w"
-        ) as archive:
+        destination = (root / name.replace(".", "_")).with_suffix(".mcpack")
+        with zipfile.ZipFile(destination, "w") as archive:
             for source_path in temp_dir.glob("**/*"):
                 print(f"archiving {source_path}")
                 archive.write(source_path, arcname=source_path.relative_to(temp_dir))
+        print(f"bundled add-on at {destination}")
 
 
 if __name__ == "__main__":
