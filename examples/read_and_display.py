@@ -12,3 +12,8 @@ with here.joinpath("../samples/waterlogged.mcstructure").open("rb") as f:
     struct = Structure.load(f)
     print("Waterlogged Stairs")
     print(struct._palette)
+
+with here.joinpath("../samples/cmdblock.mcstructure").open("rb") as f:
+    struct = Structure.load(f)
+    print("Command Block")
+    print(struct._palette)

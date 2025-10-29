@@ -36,6 +36,15 @@ created with this library.
 """
 
 
+def _get_deep(obj: Any, *keys: Any, default: Any = None) -> Any:
+    for key in keys:
+        try:
+            obj = obj[key]
+        except (KeyError, ValueError):
+            return default
+    return obj
+
+
 def is_valid_structure_name(name: str, *, with_prefix: bool = False) -> bool:
     """
     Validates the structure name.
@@ -90,8 +99,18 @@ class Block:
     identifier: str
     states: dict[str, BlockStateValue]
     waterlogged: bool = field(kw_only=True, default=False)
+    block_entity_data: Sequence[nbtx.Tag[Any, Any]] | None = field(kw_only=True, default=None)
+    tick_queue_data: nbtx.Tag[Any, Any] | None = field(kw_only=True, default=None)
 
-    def __init__(self, identifier: str, *, waterlogged: bool = False, **states: BlockStateValue):
+    def __init__(
+        self,
+        identifier: str,
+        *,
+        waterlogged: bool = False,
+        block_entity_data: Sequence[nbtx.Tag[Any, Any]] | None = None,
+        tick_queue_data: nbtx.Tag[Any, Any] | None = None, # TODO: this can be turned into a Python type and then converted into NBT
+        **states: BlockStateValue
+    ):
         """
         Parameters
         ----------
@@ -106,10 +125,18 @@ class Block:
 
         waterlogged
             Whether this block is waterlogged.
+
+        block_entity_data
+            Block entity data like the content of a container.
+
+        tick_queue_data
+            
         """
         self.identifier = identifier
         self.states = states
         self.waterlogged = waterlogged
+        self.block_entity_data = block_entity_data
+        self.tick_queue_data = tick_queue_data
 
     def __str__(self) -> str:
         return self.stringify()
@@ -296,7 +323,9 @@ class Structure:
         """
         nbt_root = nbtx.load(file, endianness="little")
         assert isinstance(nbt_root, nbtx.TagCompound)
+        nbt_body_data = nbt_root
         nbt_body = nbt_root.as_python()
+        
         size: tuple[int, int, int] = tuple(nbt_body["size"])
 
         struct = cls(size, None)
@@ -310,14 +339,30 @@ class Structure:
 
         waterlogged_mask: list[bool] = [value != -1 for value in nbt_body["structure"]["block_indices"][1]]
 
-        struct._palette.extend(
-            [
-                Block(block["name"], **(block["states"]), waterlogged=waterlogged_mask[index])
-                for (index, block) in enumerate(nbt_body["structure"]["palette"]["default"][
-                    "block_palette"
-                ])
-            ]
-        )
+        nbt_structure = nbt_body_data["structure"]
+        assert isinstance(nbt_structure, nbtx.TagCompound)
+        nbt_palette = nbt_structure["palette"]
+        assert isinstance(nbt_palette, nbtx.TagCompound)
+        nbt_default_palette = nbt_palette["default"]
+        assert isinstance(nbt_default_palette, nbtx.TagCompound)
+        block_position_data = nbt_default_palette["block_position_data"]
+
+        for (index, block) in enumerate(nbt_body["structure"]["palette"]["default"]["block_palette"]):
+            maybe_block_entity_data = _get_deep(block_position_data, str(index), "block_entity_data")
+            if maybe_block_entity_data is None:
+                block_entity_data = None
+            else:
+                block_entity_data = maybe_block_entity_data.value
+
+            struct._palette.append(
+                Block(
+                    block["name"],
+                    **(block["states"]),
+                    waterlogged=waterlogged_mask[index],
+                    block_entity_data=block_entity_data,
+                    tick_queue_data=_get_deep(block_position_data, str(index), "tick_queue_data"),
+                )
+            )
 
         return struct
 
@@ -379,11 +424,26 @@ class Structure:
         if block is None:
             return -1
 
-        if block in self._palette:
-            return self._palette.index(block)
+        if (index := self._block_index(block, ignore_waterlogged=True, ignore_block_entity_data=True, ignore_tick_queue_data=True)) is not None:
+            return index
 
         self._palette.append(block)
         return len(self._palette) - 1
+
+    def _block_index(self, block: Block, *, ignore_states: bool = False, ignore_waterlogged: bool = False, ignore_block_entity_data: bool = False, ignore_tick_queue_data: bool = False) -> int | None:
+        for (index, palette_block) in enumerate(self._palette):
+            if block.namespace_and_name != palette_block.namespace_and_name:
+                continue
+            if not ignore_states and block.states != palette_block.states:
+                continue
+            if not ignore_waterlogged and block.waterlogged != palette_block.waterlogged:
+                continue
+            if not ignore_block_entity_data and block.block_entity_data != palette_block.block_entity_data:
+                continue
+            if not ignore_tick_queue_data and block.tick_queue_data != palette_block.tick_queue_data:
+                continue
+            return index
+        return None
 
     def _water_index(self) -> int:
         """
@@ -525,7 +585,23 @@ class Structure:
                                             ],
                                         ),
                                         nbtx.TagCompound(
-                                            name="block_position_data", value=[]
+                                            name="block_position_data", value=[
+                                                nbtx.TagCompound(
+                                                    name=str(index),
+                                                    value=[
+                                                        *([nbtx.TagCompound(
+                                                            name="block_entity_data",
+                                                            value=block.block_entity_data
+                                                        )] if block.block_entity_data is not None else []),
+                                                        *([nbtx.TagList(
+                                                            name="tick_queue_data",
+                                                            child_id=nbtx.TagCompound.id(),
+                                                            value=[] # TODO
+                                                        )] if block.tick_queue_data is not None else [])
+                                                    ]
+                                                )
+                                                for (index, block) in enumerate(self._palette)
+                                            ]
                                         ),
                                     ],
                                 )
