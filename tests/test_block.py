@@ -1,7 +1,7 @@
 from mcstructure import Block
 
 
-def test_stringify():
+def test_stringify() -> None:
     b = Block("minecraft:wool", color="red")
     assert b.stringify() == 'minecraft:wool ["color"="red"]'
     assert b.stringify(with_namespace=False) == 'wool ["color"="red"]'
