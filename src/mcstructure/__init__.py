@@ -2,8 +2,6 @@
 Read and write Minecraft ``.mcstructure`` files.
 """
 
-# TODO: support additional block data
-
 from __future__ import annotations
 
 from collections.abc import Sequence
@@ -601,6 +599,7 @@ class Structure:
                                                     ]
                                                 )
                                                 for (index, block) in enumerate(self._palette)
+                                                if block.block_entity_data is not None or block.tick_queue_data is not None
                                             ]
                                         ),
                                     ],
